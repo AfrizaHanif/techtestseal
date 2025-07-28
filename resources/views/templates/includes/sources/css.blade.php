@@ -14,6 +14,7 @@
 <!--MAIN-->
 <link rel="stylesheet" href="{{asset('sources/css/badges.css')}}">
 <link rel="stylesheet" href="{{asset('sources/css/bootstrap.css')}}">
+<link rel="stylesheet" href="{{asset('sources/css/breadcrumbs.css')}}">
 <link rel="stylesheet" href="{{asset('sources/css/dropdown.css')}}">
 <link rel="stylesheet" href="{{asset('sources/css/features.css')}}">
 <link rel="stylesheet" href="{{asset('sources/css/fontawesome.css')}}">

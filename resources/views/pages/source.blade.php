@@ -8,15 +8,7 @@
 
 <!--CONTENTS-->
 @section('contents')
-    @if (Request::is('/'))
-        @include('pages.includes.contents.index')
-    @elseif (Request::is('*/*/*'))
-        @include('pages.includes.contents.post')
-    @elseif (Request::is('*/*'))
-        @include('pages.includes.contents.source')
-    @elseif (Request::is('*'))
-        @include('pages.includes.contents.redirect')
-    @endif
+@include('pages.includes.contents.source')
 @endsection
 
 <!--MODALS-->
