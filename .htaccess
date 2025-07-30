@@ -1,19 +1,9 @@
 <IfModule mod_rewrite.c>
-    # Default Hostinger .htaccess
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
 
-    # Prevent directory listing
-    Options -Indexes
-
-    # Enable mod_rewrite
     RewriteEngine On
-
-    # Redirect www to non-www (optional, bisa dihapus jika tidak perlu)
-    # RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
-    # RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
-
-    # Redirect HTTP to HTTPS (optional, bisa dihapus jika tidak perlu)
-    # RewriteCond %{HTTPS} off
-    # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
@@ -23,8 +13,13 @@
     RewriteCond %{HTTP:x-xsrf-token} .
     RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
 
-    # Handle index.php
-    RewriteCond %{REQUEST_FILENAME} !-f
+    # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^(.*)$ index.php [L]
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Send Requests To Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
 </IfModule>
