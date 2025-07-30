@@ -8,68 +8,178 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 
-
-
 class HomeController extends Controller
 {
-    public function index(){
-        $response = Http::get('https://api-berita-indonesia.vercel.app/');
+    public function __construct(){
 
-        if($response->successful()){
-            $jsonData = json_decode($response, true);
-            // dd('Success', $heroes);
-        }elseif($response->failed()){
-            if($response->clientError()){
+    }
 
-            }elseif($response->serverError()){
+    public function index(Request $request){
+        // CONSUME EXTERNAL API
+        $nav_response = Http::get('https://api-berita-indonesia.vercel.app/');
+
+        // CHECK API RESPONSE
+        if($nav_response->successful()){
+            // DECODING JSON WITH SETTING UP COLUMN AND SHUFFLE (RANDOM AND EXPLORE)
+            $navJson = array_column($this->getSource(json_decode($nav_response, true)['endpoints']), 'name');
+            $randomJson = $navJson;
+            shuffle($randomJson);
+            $exploreJson = $navJson;
+            shuffle($exploreJson);
+
+            // SLICING THE ARRAY TO SPECIFIC LIMIT
+            $random = array_slice($randomJson, 0, 1);
+            $explore = array_slice($exploreJson, 0, 5);
+        }elseif($nav_response->failed()){
+            if($nav_response->clientError()){
+
+            }elseif($nav_response->serverError()){
 
             }
         }else{
 
         }
 
+        // RETURN TO VIEW
         return view('pages.index', compact([
-            'jsonData',
+            'navJson',
+            'random',
+            'explore',
         ]));
     }
 
-    public function redirect($source){
-        $response = Http::get('https://api-berita-indonesia.vercel.app/'.$source.'/terbaru/');
+    public function redirect(Request $request, $source){
+        // GET DATA
+        $search = $request->input('search');
+        $all_posts = [];
+        $selected_source = $source;
 
-        if($response->successful()){
-            $jsonData = json_decode($response, true);
-            // dd('Success', $jsonData['data']['posts']);
-        }elseif($response->failed()){
-            if($response->clientError()){
+        // CONSUME EXTERNAL API FOR NAVIGATION
+        $nav_response = Http::get('https://api-berita-indonesia.vercel.app/');
 
-            }elseif($response->serverError()){
+        // CHECK API RESPONSE
+        if($nav_response->successful()){
+            // DECODING JSON FOR SOURCE AND NAVIGATION
+            $sourceJson = $this->searchSource(json_decode($nav_response, true)['endpoints'], $source);
+            $navJson = array_column($this->getSource(json_decode($nav_response, true)['endpoints']), 'name');
+
+            // LOOPING FOR GET ALL POSTS
+            foreach($sourceJson[0]['paths'] as $source_key => $source_value){
+                // CONSUME EXTERNAL API FOR POSTS IN SPECIFIC SOURCE AND EVERY CATEGORIES
+                $response = json_decode(Http::get('https://api-berita-indonesia.vercel.app/'.$source.'/'.$source_value['name']), true);
+                // dd(count($response['data']['posts']));
+
+                // CHECK IF NO DATA IN CATEGORY
+                if ($response !== null && isset($response['data']['posts'])) {
+                    // ADD CATEGORY TO API
+                    foreach($response['data']['posts'] as $res_key => $res_value){
+                        $response['data']['posts'][$res_key]['category'] = $source_value['name'];
+                    }
+
+                    // MERGE ARRAY DURING LOOPING
+                    $all_posts = array_merge($all_posts, $response['data']['posts']);
+                }
+                // dd($all_posts);
+
+                // array_push($all_posts, ['category' => $source_value['name']]);
+                // $all_posts[] = $source_value['name'];
+
+                // $response['data']['posts']['category'] = $source_value['name'];
+                // $all_posts = array_merge($all_posts, $response['data']['posts']);
+            }
+            // dd($all_posts);
+            // $column = array_column(array_column($all_posts, 'data'), 'posts');
+
+            // IF SEARCH AVAILABLE
+            if($search){
+                // LAUNCH FUNCTION TO SEARCH TITLE
+                $searchJson = $this->searchJson($all_posts, $search);
+
+                // LAUNCH FUNCTION TO PAGINATE ALL POSTS
+                $recommends = $this->paginate($searchJson);
+            }else{
+                // LAUNCH FUNCTION TO PAGINATE ALL POSTS
+                $recommends = $this->paginate($all_posts);
+            }
+
+            // SHUFFLE THE ARRAY FOR PICKING A RANDOM ITEMS
+            $headlineJson = $all_posts;
+            shuffle($headlineJson);
+            $popularJson = $all_posts;
+            shuffle($popularJson);
+            $exploreJson = array_column($sourceJson[0]['paths'], 'name');
+            shuffle($exploreJson);
+
+            // SLICING THE ARRAY TO SPECIFIC LIMIT
+            $headlines = array_slice($headlineJson, 0, 5);
+            $populars = array_slice($popularJson, 0, 3);
+            $explore = array_slice($exploreJson, 0, 5);
+        }elseif($nav_response->failed()){
+            if($nav_response->clientError()){
+
+            }elseif($nav_response->serverError()){
 
             }
         }else{
 
         }
 
-        return view('pages.index', compact([
-            'jsonData',
+        // RETURN TO VIEW
+        return view('pages.redirect', compact([
+            'search',
+            'sourceJson',
+            'selected_source',
+            'navJson',
+            'exploreJson',
+            'all_posts',
+            'recommends',
+            'headlines',
+            'populars',
+            'explore',
         ]));
     }
 
-    public function source($source, $category){
-        $response = Http::get('https://api-berita-indonesia.vercel.app/'.$source.'/'.$category);
+    public function source(Request $request, $source, $category){
+        // GET DATA
+        $search = $request->input('search');
         $selected_source = $source;
         $selected_category = $category;
 
-        if($response->successful()){
-            $jsonData = json_decode($response, true)['data']['posts'];
-            $headlines = array_slice(json_decode($response, true)['data']['posts'], 0, 5);
-            shuffle($headlines);
-            $populars = array_slice(json_decode($response, true)['data']['posts'], 0, 3);
-            shuffle($populars);
-            // $headlines = array_slice($jsonData, 0, 5);
-            // $populars = array_slice($jsonData, 0, 3);
-            $recommends = $this->paginate($jsonData);
+        // CONSUME EXTERNAL API
+        $response = Http::get('https://api-berita-indonesia.vercel.app/'.$source.'/'.$category);
+        $nav_response = Http::get('https://api-berita-indonesia.vercel.app/');
 
-            // dd('Success', $recommends);
+        // CHECK API RESPONSE
+        if($response->successful()){
+            // DECODING JSON WITH LAUNCH A FUNCTION (SEARCH, CATEGORY, AND NAVIGATION)
+            $jsonData = json_decode($response, true)['data']['posts'];
+            $sourceJson = $this->searchSource(json_decode($nav_response, true)['endpoints'], $source);
+            $navJson = array_column($this->getSource(json_decode($nav_response, true)['endpoints']), 'name');
+
+            // IF SEARCH AVAILABLE
+            if($search){
+                // LAUNCH FUNCTION TO SEARCH TITLE
+                $searchJson = $this->searchJson($jsonData, $search);
+
+                // LAUNCH FUNCTION TO PAGINATE ALL POSTS
+                $recommends = $this->paginate($searchJson);
+            }else{
+                // LAUNCH FUNCTION TO PAGINATE ALL POSTS
+                $recommends = $this->paginate($jsonData);
+            }
+
+            // SHUFFLE THE ARRAY FOR PICKING A RANDOM ITEMS
+            $headlineJson = $jsonData;
+            shuffle($headlineJson);
+            $popularJson = $jsonData;
+            shuffle($popularJson);
+            $exploreJson = array_column($sourceJson[0]['paths'], 'name');
+            shuffle($exploreJson);
+
+            // SLICING THE ARRAY
+            $headlines = array_slice($headlineJson, 0, 5);
+            $populars = array_slice($popularJson, 0, 3);
+            $explore = array_slice($exploreJson, 0, 5);
         }elseif($response->failed()){
             if($response->clientError()){
 
@@ -80,28 +190,52 @@ class HomeController extends Controller
 
         }
 
+        // RETURN TO VIEW
         return view('pages.source', compact([
+            'search',
             'selected_source',
             'selected_category',
+            'sourceJson',
+            'navJson',
+            'recommends',
             'headlines',
             'populars',
-            'recommends',
+            'explore',
         ]));
     }
 
-    public function post($source, $category, $index){
-        $response = Http::get('https://api-berita-indonesia.vercel.app/'.$source.'/'.$category);
+    public function post(Request $request, $source, $category, $index){
+        // GET DATA
         $selected_source = $source;
         $selected_category = $category;
         $selected_index = $index;
 
+        // CONSUME EXTERNAL API
+        $response = Http::get('https://api-berita-indonesia.vercel.app/'.$source.'/'.$category);
+        $nav_response = Http::get('https://api-berita-indonesia.vercel.app/');
+
+
         if($response->successful()){
+            // DECODING JSON WITH LAUNCH A FUNCTION (SEARCH AND NAVIGATION)
+            $sourceJson = $this->searchSource(json_decode($nav_response, true)['endpoints'], $source);
+            $navJson = array_column($this->getSource(json_decode($nav_response, true)['endpoints']), 'name');
             $jsonData = json_decode($response, true)['data']['posts'][$index];
-            $populars = array_slice(json_decode($response, true)['data']['posts'], 0, 3);
-            shuffle($populars);
-            $related = array_slice(json_decode($response, true)['data']['posts'], 0, 3);
-            shuffle($related);
-            // dd('Success', $jsonData);
+            $jsonData1 = json_decode($response, true)['data']['posts'];
+
+            // SHUFFLE THE ARRAY FOR PICKING A RANDOM ITEMS
+            $popularJson = $jsonData1;
+            shuffle($popularJson);
+            $relatedJson = $jsonData1;
+            shuffle($relatedJson);
+            $exploreJson = array_column($sourceJson[0]['paths'], 'name');
+            shuffle($exploreJson);
+
+            // SLICING THE ARRAY
+            $populars = array_slice($popularJson, 0, 3);
+            $related = array_slice($relatedJson, 0, 3);
+            $explore = array_slice($exploreJson, 0, 5);
+
+            // dd($related);
         }elseif($response->failed()){
             if($response->clientError()){
 
@@ -112,24 +246,99 @@ class HomeController extends Controller
 
         }
 
-        return view('pages.index', compact([
+        // RETURN TO VIEW
+        return view('pages.post', compact([
             'selected_source',
             'selected_category',
             'selected_index',
+            'sourceJson',
+            'navJson',
             'jsonData',
             'populars',
             'related',
+            'explore',
         ]));
     }
 
-
-    public function paginate($items, $perPage = 8, $page = null, $options = [])
-    {
+    // FOR PAGINATE ALL POSTS
+    public function paginate($items, $perPage = 8, $page = null, $options = []){
+        // SETTING UP FOR PAGINATION
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $items = $items instanceof Collection ? $items : Collection::make($items);
         $options = [
             'path' => Paginator::resolveCurrentPath()
         ];
+
+        // RETURN TO FUNCTION
         return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+    }
+
+    // FOR SEARCH ANY POST WITHIN CRITERIA
+    function searchJson($obj, $value){
+        // GET DATA
+        $list = [];
+
+        // CONVERT TEXT TO LOWERCASE
+        $search_value = strtolower($value);
+
+        // LOOPING THE OBJECT (ARRAY)
+        foreach ($obj as $key => $val){
+            // CHECK IF SEARCH VALUE AND TITLE PARTIALLY MATCH
+            if (strpos(strtolower($val['title']), $search_value) !== FALSE){
+                // ADD ITEM TO LIST
+                $list[] = $val;
+            }
+        }
+
+        // CHECK IF THERE'S A RESULT
+        if(count($list) >= 1){
+            return $list;
+        }else{
+            return null;
+        }
+    }
+
+    // FOR SEARCH ANY CATEGORY WITHIN SOURCE
+    function searchSource($obj, $value){
+        // GET DATA
+        $list = [];
+
+        // CONVERT TEXT TO LOWERCASE
+        $search_value = strtolower($value);
+
+        // LOOPING THE OBJECT (ARRAY)
+        foreach ($obj as $key => $val){
+            // CHECK IF SEARCH VALUE AND TITLE FULLY MATCH
+            if(strtolower(($val['name']) === $search_value)){
+                // ADD ITEM TO LIST
+                $list[] = $val;
+            }
+        }
+
+        // CHECK IF THERE'S A RESULT
+        if(count($list) >= 1){
+            return $list;
+        }else{
+            return null;
+        }
+    }
+
+    // TO GET ALL SOURCE FOR NAVIGATION
+    function getSource($obj){
+        // GET DATA
+        $list = [];
+
+        // LOOPING THE OBJECT (ARRAY)
+        foreach ($obj as $key => $val){
+            // ADD ITEM TO LIST
+            $list[] = $val;
+        }
+
+        // CHECK IF THERE'S A RESULT
+        if(count($list) >= 1){
+            return $list;
+        }else{
+            return null;
+        }
     }
 }

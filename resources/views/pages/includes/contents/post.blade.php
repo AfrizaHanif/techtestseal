@@ -1,5 +1,5 @@
-{{-- BREADCRUMBS --}}
-<div class="container my-3">
+{{-- NAVIGATON (BREADCRUMBS) --}}
+<div class="container pt-3 my-3">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb breadcrumb-chevron p-3 bg-body-tertiary rounded-3">
             <li class="breadcrumb-item">
@@ -28,7 +28,8 @@
             <p>{{ ucfirst($selected_category) }} | {{ \Carbon\Carbon::parse(env($jsonData['pubDate']))->locale('id')->translatedFormat('d F Y') }}</p>
             <img src="{{ url($jsonData['thumbnail']) }}" class="d-block mx-lg-auto rounded img-fluid" alt="Bootstrap Themes" loading="lazy">
             <br/>
-            <p>{{ $jsonData['description'] }}</p>
+            <p>{{ html_entity_decode($jsonData['description']) }}</p>
+            <a href="{{ url($jsonData['link']) }}" type="button" class="btn btn-secondary btn-sm">Kunjungi Sumber</a>
             <h2 class="pt-3 pb-2 border-bottom">Komentar</h2>
             <div class="row pt-3 pb-3">
                 <div class="col-1">
@@ -45,12 +46,19 @@
                     </a>
                 </div>
             </div>
-            <h2 class="pt-3 pb-2 border-bottom">Berita Terkait</h2>
+            <div class="row pt-3 pb-2 align-items-start border-bottom">
+                <div class="col-8">
+                    <h2>Berita Terkait</h2>
+                </div>
+                <div class="col-4">
+                    <a href="/{{ $selected_source }}/{{ $selected_category }}" type="button" class="btn btn-primary float-end">Lihat Semua</a>
+                </div>
+            </div>
             <div class="row row-cols-1 row-cols-md-3 g-4 pt-3 pb-3">
                 @foreach ($related as $rel_key => $rel_value)
                 <div class="col">
                     <div class="card h-100 border-0">
-                        <img src="{{ url($rel_value['thumbnail']) }}" class="card-img-top card-img-bottom" alt="...">
+                        <img src="{{ url($rel_value['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/landing.png') }}'" class="card-img-top card-img-bottom" alt="...">
                         <div class="card-body">
                             <a href="/{{ $selected_source }}/{{ $selected_category }}/{{ $rel_key }}" class="stretched-link" style="text-decoration: none; color: black;">
                                 <h5 class="card-title">{{ $rel_value['title'] }}</h5>
@@ -65,7 +73,7 @@
             </div>
         </div>
         <div class="col-4">
-            {{-- BERITA TERPOPULER (FEATURES) --}}
+            {{-- BERITA TERPOPULER (CARDS) --}}
             <h2 class="pb-2 border-bottom">Berita Terpopuler</h2>
                 @foreach ($populars as $pop_key => $pop_value)
                     <div class="card mb-3 border-0 {{ $loop->first ? 'pt-3' : '' }} position-relative">

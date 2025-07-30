@@ -1,0 +1,45 @@
+//Single Dimensional for Search
+        <div class="col">
+            <div class="card h-100 border-0">
+                <img src="url({{ $recommends['thumbnail'] }})" class="card-img-top card-img-bottom" alt="...">
+                <div class="card-body">
+                    <a href="/{{ $selected_source }}/{{ $selected_category }}" class="stretched-link" style="text-decoration: none; color: black;">
+                        <h5 class="card-title">{{ $recommends['title'] }}</h5>
+                    </a>
+                    <p class="card-text">
+                        {{ ucfirst($selected_category) }} | {{ \Carbon\Carbon::parse($recommends['pubDate'])->locale('id')->translatedFormat('d F Y') }}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+// Function Search
+        ATTEMPT 1
+        foreach($obj as $key => $item) {
+            if(!is_nan(intval($key)) && is_array($item)){
+                if(in_array($value, $item)){
+                    return $item;
+                }
+            }else{
+                foreach($item as $child) {
+                    if(isset($child) && $child == $value) {
+                        return $child;
+                    }
+                }
+            }
+        }
+        return null;
+
+        ATTEMPT 2
+        $names = array_column($obj, 'title');
+        if(in_array($value, $names)){
+            return $names;
+        }else{
+            return null;
+        }
+        dd($names);
+
+// FULLY MATCH
+            if($val['title'] === $search_value){
+                return $val;
+            }

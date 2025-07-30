@@ -19,5 +19,7 @@
 <link rel="stylesheet" href="{{asset('sources/css/features.css')}}">
 <link rel="stylesheet" href="{{asset('sources/css/fontawesome.css')}}">
 <link rel="stylesheet" href="{{asset('sources/css/header.css')}}">
+<link rel="stylesheet" href="{{asset('sources/css/heroes.css')}}">
 <link rel="stylesheet" href="{{asset('sources/css/list-groups.css')}}">
 <link rel="stylesheet" href="{{asset('sources/css/modal.css')}}">
+<link rel="stylesheet" href="{{asset('sources/css/scroll-header.css')}}">

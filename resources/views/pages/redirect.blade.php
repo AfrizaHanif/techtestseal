@@ -8,7 +8,7 @@
 
 <!--CONTENTS-->
 @section('contents')
-@include('pages.includes.contents.index')
+@include('pages.includes.contents.redirect')
 @endsection
 
 <!--MODALS-->
