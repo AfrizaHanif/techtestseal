@@ -34,7 +34,7 @@
     <!--OFFCANVAS IN EACH PAGES-->
     @yield('offcanvas')
     <!--FOOTER-->
-    @include('templates.includes.Layouts.footer')
+    @include('templates.includes.layouts.footer')
     <!--SCRIPTS (JS) IN EVERY TEMPLATES-->
     @include('templates.includes.sources.js')
     <!--SCRIPTS (JS) IN EACH PAGES-->
