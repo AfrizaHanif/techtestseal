@@ -1,0 +1,9 @@
+/* #scroll_header {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    }
+
+#scroll_header.scrolled {
+    opacity: 1;
+} */
+
