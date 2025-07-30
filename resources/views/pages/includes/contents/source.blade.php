@@ -39,7 +39,7 @@
             <div class="container col-xxl-8 px-4 py-5">
                 <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
                     <div class="col-10 col-sm-8 col-lg-6">
-                        <img src="{{ url($head_value['thumbnail']) }}" class="d-block mx-lg-auto rounded img-fluid" alt="Bootstrap Themes" width="700" height="500" loading="lazy">
+                        <img src="{{ url($head_value['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/landing.png') }}'" class="d-block mx-lg-auto rounded img-fluid" alt="Bootstrap Themes" width="700" height="500" loading="lazy">
                     </div>
                     <div class="col-lg-6">
                         <p><b>Headline</b></p>
@@ -74,7 +74,7 @@
                     <span class="position-absolute top-0 start-20 translate-middle badge rounded-pill bg-black">
                         {{ $loop->index + 1 }}
                     </span>
-                    <img src="{{ url($pop_value['thumbnail']) }}" class="d-block mx-lg-auto rounded img-fluid" loading="lazy">
+                    <img src="{{ url($pop_value['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/landing.png') }}'" class="d-block mx-lg-auto rounded img-fluid" loading="lazy">
                 </div>
                 <div class="col-7">
                     <h3 class="fs-6 text-body-emphasis">{{ $pop_value['title'] }}</h3>
@@ -90,7 +90,7 @@
                     <span class="position-absolute top-0 start-20 translate-middle badge rounded-pill bg-black">
                         {{ $loop->index + 1 }}
                     </span>
-                    <img src="{{ url($pop_value['thumbnail']) }}" class="img-fluid rounded pt-1" alt="...">
+                    <img src="{{ url($pop_value['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/landing.png') }}'" class="img-fluid rounded pt-1" alt="...">
                 </div>
                 <div class="col-md-8">
                     <div class="card-body py-0">
@@ -136,7 +136,7 @@
         @foreach ($recommends as $json_key => $json_value)
         <div class="col">
             <div class="card h-100 border-0">
-                <img src="{{ url($json_value['thumbnail']) }}" class="card-img-top card-img-bottom" alt="...">
+                <img src="{{ url($json_value['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/landing.png') }}'" class="card-img-top card-img-bottom" alt="...">
                 <div class="card-body">
                     <a href="/{{ $selected_source }}/{{ $selected_category }}/{{ $json_key }}" class="stretched-link" style="text-decoration: none; color: black;">
                         <h5 class="card-title">{{ $json_value['title'] }}</h5>
@@ -154,7 +154,7 @@
             @foreach ($recommends as $json_key => $json_value)
             <div class="col">
                 <div class="card h-100 border-0">
-                    <img src="{{ url($json_value['thumbnail']) }}" class="card-img-top card-img-bottom" alt="...">
+                    <img src="{{ url($json_value['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/landing.png') }}'" class="card-img-top card-img-bottom" alt="...">
                     <div class="card-body">
                         <a href="/{{ $selected_source }}/{{ $selected_category }}/{{ $json_key }}" class="stretched-link" style="text-decoration: none; color: black;">
                             <h5 class="card-title">{{ $json_value['title'] }}</h5>

@@ -26,7 +26,7 @@
         <div class="col-8">
             <h1 class="display-6 fw-bold text-body-emphasis lh-1 mb-3">{{ $jsonData['title'] }}</h1>
             <p>{{ ucfirst($selected_category) }} | {{ \Carbon\Carbon::parse(env($jsonData['pubDate']))->locale('id')->translatedFormat('d F Y') }}</p>
-            <img src="{{ url($jsonData['thumbnail']) }}" class="d-block mx-lg-auto rounded img-fluid" alt="Bootstrap Themes" loading="lazy">
+            <img src="{{ url($jsonData['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/landing.png') }}'" class="d-block mx-lg-auto rounded img-fluid" alt="Bootstrap Themes" loading="lazy">
             <br/>
             <p>{{ html_entity_decode($jsonData['description']) }}</p>
             <a href="{{ url($jsonData['link']) }}" type="button" class="btn btn-secondary btn-sm" target="_blank" rel="noopener noreferrer">
@@ -82,7 +82,7 @@
                     <div class="card mb-3 border-0 {{ $loop->first ? 'pt-3' : '' }} position-relative">
                         <div class="row g-0">
                             <div class="col-md-4">
-                                <img src="{{ url($pop_value['thumbnail']) }}" class="img-fluid rounded pt-1" alt="...">
+                                <img src="{{ url($pop_value['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/landing.png') }}'" class="img-fluid rounded pt-1" alt="...">
                                 <span class="position-absolute {{ $loop->first ? 'top-20' : '' }} start-0 translate-middle badge rounded-pill bg-black">
                                     {{ $loop->index + 1 }}
                                 </span>

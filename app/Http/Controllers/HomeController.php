@@ -114,6 +114,19 @@ class HomeController extends Controller
             $headlines = array_slice($headlineJson, 0, 5);
             $populars = array_slice($popularJson, 0, 3);
             $explore = array_slice($exploreJson, 0, 5);
+
+            // VERIFY IF POSTS NOT AVAILABLE (NULL)
+            if(count($all_posts) == 0){
+                $error = 'Tidak ada postingan dari sumber tersebut. Hubungi pengelola API.';
+
+                return view('pages.empty', compact([
+                    'navJson',
+                    'explore',
+                    'sourceJson',
+                    'selected_source',
+                    'error',
+                ]));
+            }
         }elseif($nav_response->failed()){
             if($nav_response->clientError()){
 

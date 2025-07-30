@@ -30,7 +30,7 @@
                 </a>
                 <ul class="nav nav-pills">
                     @if (Request::is('/'))
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a href="#" class="nav-link disabled" aria-current="page">
                             Beranda
                         </a>
@@ -46,7 +46,7 @@
                                 </a>
                             </li>
                         </ul>
-                    </li>
+                    </li> --}}
                     @else
                     <li class="nav-item">
                         <a href="/{{ $selected_source }}" class="nav-link {{ (request()->is($selected_source.'')) ? 'active' : '' }}" aria-current="page">
