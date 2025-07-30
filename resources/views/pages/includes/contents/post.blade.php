@@ -29,7 +29,10 @@
             <img src="{{ url($jsonData['thumbnail']) }}" class="d-block mx-lg-auto rounded img-fluid" alt="Bootstrap Themes" loading="lazy">
             <br/>
             <p>{{ html_entity_decode($jsonData['description']) }}</p>
-            <a href="{{ url($jsonData['link']) }}" type="button" class="btn btn-secondary btn-sm">Kunjungi Sumber</a>
+            <a href="{{ url($jsonData['link']) }}" type="button" class="btn btn-secondary btn-sm" target="_blank" rel="noopener noreferrer">
+                <i class="bi bi-box-arrow-up-right"></i>
+                Kunjungi Sumber
+            </a>
             <h2 class="pt-3 pb-2 border-bottom">Komentar</h2>
             <div class="row pt-3 pb-3">
                 <div class="col-1">

@@ -9,11 +9,11 @@
             <div class="container d-flex flex-wrap">
                 <ul class="nav me-auto">
                     @foreach ($navJson as $nav_key => $nav_value)
-                    <li class="nav-item">
-                        <a href="/{{ $nav_value }}" class="nav-link link-body-emphasis px-2 {{ (request()->is(''.$nav_value.'*')) ? 'active' : '' }}" aria-current="page">
-                        {{ ucfirst($nav_value) }}
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a href="/{{ $nav_value }}" class="nav-link link-body-emphasis px-2 {{ (request()->is($nav_value.'*')) ? 'active' : '' }}" aria-current="{{ (request()->is($nav_value.'*')) ? 'page' : '' }}">
+                                {{ ucfirst($nav_value) }}
+                            </a>
+                        </li>
                     @endforeach
                 </ul>
                 <ul class="nav">
@@ -49,24 +49,34 @@
                     </li>
                     @else
                     <li class="nav-item">
-                        <a href="/{{ $selected_source }}" class="nav-link active" aria-current="page">
+                        <a href="/{{ $selected_source }}" class="nav-link {{ (request()->is($selected_source.'')) ? 'active' : '' }}" aria-current="page">
                             Beranda
                         </a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Kategori
-                        </a>
-                        <ul class="dropdown-menu">
+                        @if (count($sourceJson[0]['paths']) < 5)
                             @foreach ($sourceJson[0]['paths'] as $source_key => $source_value)
-                            <li>
-                                <a class="dropdown-item" href="{{ $source_value['path'] }}">
+                            <li class="nav-item">
+                                <a href="{{ $source_value['path'] }}" class="nav-link {{ (request()->is($selected_source.'/'.$source_value['name'].'*')) ? 'active' : '' }}" aria-current="{{ (request()->is($selected_source.'/'.$source_value['name'].'*')) ? 'page' : '' }}">
                                     {{ ucfirst($source_value['name']) }}
                                 </a>
                             </li>
                             @endforeach
-                        </ul>
-                    </li>
+                        @else
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle {{ (request()->is($selected_source.'/*')) ? 'active' : '' }}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Kategori
+                            </a>
+                            <ul class="dropdown-menu">
+                                @foreach ($sourceJson[0]['paths'] as $source_key => $source_value)
+                                <li>
+                                    <a class="dropdown-item {{ (request()->is($selected_source.'/'.$source_value['name'].'*')) ? 'active' : '' }}" href="{{ $source_value['path'] }}">
+                                        {{ ucfirst($source_value['name']) }}
+                                    </a>
+                                </li>
+                                @endforeach
+                            </ul>
+                        </li>
+                        @endif
                     @endif
                 </ul>
             </header>

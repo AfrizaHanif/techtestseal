@@ -3,7 +3,7 @@
 
 <!--TITLE-->
 @section('title')
-<title>Berita Kini</title>
+<title>{{ ucfirst($selected_category) }} ({{ ucfirst($selected_source) }}) | Berita Kini</title>
 @endsection
 
 <!--CONTENTS-->

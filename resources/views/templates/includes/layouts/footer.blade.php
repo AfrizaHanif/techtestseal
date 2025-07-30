@@ -8,6 +8,18 @@
             <p class="text-body-secondary">&copy; 2025 Berita Kini. All Rights Reserved.</p>
             <br/>
             <h6>Ikuti Kami</h6>
+            <ul class="list-unstyled d-flex">
+                <li class="">
+                    <a class="link-body-emphasis" href="https://facebook.com" aria-label="Facebook">
+                        <svg class="bi" width="24" height="24" aria-hidden="true"><use xlink:href="#facebook"></use></svg>
+                    </a>
+                </li>
+                <li class="ms-3">
+                    <a class="link-body-emphasis" href="https://instagram.com" aria-label="Instagram">
+                        <svg class="bi" width="24" height="24"><use xlink:href="#instagram"></use></svg>
+                    </a>
+                </li>
+            </ul>
         </div>
         <div class="col mb-3">
             @if (Request::is('/'))
