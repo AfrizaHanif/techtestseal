@@ -123,7 +123,7 @@ class HomeController extends Controller
 
             // VERIFY IF POSTS NOT AVAILABLE (NULL)
             if(count($all_posts) == 0){
-                $error = 'Tidak ada postingan dari sumber tersebut. Hubungi pengelola API.';
+                $error = 'Tidak ada postingan dari sumber tersebut. Mohon untuk mengunjungi sumber ini beberapa saat lagi';
 
                 return view('pages.empty', compact([
                     'navJson',
@@ -171,7 +171,16 @@ class HomeController extends Controller
         // CHECK API RESPONSE
         if($response->successful()){
             // DECODING JSON WITH LAUNCH A FUNCTION (SEARCH, CATEGORY, AND NAVIGATION)
-            $jsonData = json_decode($response, true)['data']['posts'];
+            $responseArray = json_decode($response, true);
+            $jsonData = [];
+            if (
+                is_array($responseArray) &&
+                isset($responseArray['data']) &&
+                isset($responseArray['data']['posts'])
+            ){
+                $jsonData = $responseArray['data']['posts'];
+            }
+
             $sourceJson = $this->searchSource(json_decode($nav_response, true)['endpoints'], $source);
             $navJson = array_column($this->getSource(json_decode($nav_response, true)['endpoints']), 'name');
 
@@ -205,6 +214,19 @@ class HomeController extends Controller
             $headlines = array_slice($headlineJson, 0, 5);
             $populars = array_slice($popularJson, 0, 3);
             $explore = array_slice($exploreJson, 0, 5);
+
+            // VERIFY IF POSTS NOT AVAILABLE (NULL)
+            if(count($jsonData) == 0){
+                $error = 'Tidak ada postingan dari kategori di sumber tersebut. Mohon untuk mengunjungi kategori ini beberapa saat lagi';
+
+                return view('pages.empty', compact([
+                    'navJson',
+                    'explore',
+                    'sourceJson',
+                    'selected_source',
+                    'error',
+                ]));
+            }
         }elseif($response->failed()){
             if($response->clientError()){
 
