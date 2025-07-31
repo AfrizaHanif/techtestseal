@@ -11,7 +11,11 @@
                     @foreach ($navJson as $nav_key => $nav_value)
                         <li class="nav-item">
                             <a href="/{{ $nav_value }}" class="nav-link link-body-emphasis px-2 {{ (request()->is($nav_value.'*')) ? 'active' : '' }}" aria-current="{{ (request()->is($nav_value.'*')) ? 'page' : '' }}">
+                                @if (strlen(ucfirst($nav_value)) > 4)
                                 {{ ucfirst($nav_value) }}
+                                @else
+                                {{ strtoupper($nav_value) }}
+                                @endif
                             </a>
                         </li>
                     @endforeach
@@ -70,7 +74,8 @@
                                 @foreach ($sourceJson[0]['paths'] as $source_key => $source_value)
                                 <li>
                                     <a class="dropdown-item {{ (request()->is($selected_source.'/'.$source_value['name'].'*')) ? 'active' : '' }}" href="{{ $source_value['path'] }}">
-                                        {{ ucfirst($source_value['name']) }}
+                                        {{-- {{ ucfirst($source_value['name']) }} --}}
+                                        {{ ucfirst(preg_replace('/(?<=[a-z])([A-Z])/', ' $1', $source_value['name'])) }}
                                     </a>
                                 </li>
                                 @endforeach

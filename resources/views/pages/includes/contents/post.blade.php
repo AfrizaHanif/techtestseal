@@ -12,7 +12,7 @@
                 <a class="link-body-emphasis fw-semibold text-decoration-none" href="/{{ $selected_source }}">{{ ucfirst($selected_source) }}</a>
             </li>
             <li class="breadcrumb-item">
-                <a class="link-body-emphasis fw-semibold text-decoration-none" href="/{{ $selected_source }}/{{ $selected_category }}">{{ ucfirst($selected_category) }}</a>
+                <a class="link-body-emphasis fw-semibold text-decoration-none" href="/{{ $selected_source }}/{{ $selected_category }}">{{ ucfirst(preg_replace('/(?<=[a-z])([A-Z])/', ' $1', $selected_category)) }}</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
             Detail
@@ -23,16 +23,20 @@
 
 <div class="container">
     <div class="row">
+        {{-- MAIN CONTENT --}}
         <div class="col-8">
+            {{-- BERITA DIPILIH --}}
             <h1 class="display-6 fw-bold text-body-emphasis lh-1 mb-3">{{ $jsonData['title'] }}</h1>
             <p>{{ ucfirst($selected_category) }} | {{ \Carbon\Carbon::parse(env($jsonData['pubDate']))->locale('id')->translatedFormat('d F Y') }}</p>
-            <img src="{{ url($jsonData['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/landing.png') }}'" class="d-block mx-lg-auto rounded img-fluid" alt="Bootstrap Themes" loading="lazy">
+            <img src="{{ url($jsonData['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/nopic.png') }}'" class="d-block mx-lg-auto rounded img-fluid" alt="Bootstrap Themes" loading="lazy">
             <br/>
             <p>{{ html_entity_decode($jsonData['description']) }}</p>
             <a href="{{ url($jsonData['link']) }}" type="button" class="btn btn-secondary btn-sm" target="_blank" rel="noopener noreferrer">
                 <i class="bi bi-box-arrow-up-right"></i>
                 Kunjungi Sumber
             </a>
+
+            {{-- KOMENTAR --}}
             <h2 class="pt-3 pb-2 border-bottom">Komentar</h2>
             <div class="row pt-3 pb-3">
                 <div class="col-1">
@@ -49,25 +53,29 @@
                     </a>
                 </div>
             </div>
+
+            {{-- BERITA TERKAIT (CARDS) --}}
             <div class="row pt-3 pb-2 align-items-start border-bottom">
                 <div class="col-8">
                     <h2>Berita Terkait</h2>
                 </div>
                 <div class="col-4">
-                    <a href="/{{ $selected_source }}/{{ $selected_category }}" type="button" class="btn btn-primary float-end">Lihat Semua</a>
+                    {{-- <a href="/{{ $selected_source }}/{{ $selected_category }}" type="button" class="btn btn-primary float-end">Lihat Semua</a> --}}
+                    <a href="/{{ $selected_source }}" type="button" class="btn btn-primary float-end">Lihat Semua</a>
                 </div>
             </div>
             <div class="row row-cols-1 row-cols-md-3 g-4 pt-3 pb-3">
                 @foreach ($related as $rel_key => $rel_value)
                 <div class="col">
                     <div class="card h-100 border-0">
-                        <img src="{{ url($rel_value['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/landing.png') }}'" class="card-img-top card-img-bottom" alt="...">
+                        <img src="{{ url($rel_value['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/nopic.png') }}'" class="card-img-top card-img-bottom" alt="...">
                         <div class="card-body">
-                            <a href="/{{ $selected_source }}/{{ $selected_category }}/{{ $rel_key }}" class="stretched-link" style="text-decoration: none; color: black;">
+                            <a href="/{{ $selected_source }}/{{ $rel_value['category'] }}/{{ $rel_value['id'] }}" class="stretched-link" style="text-decoration: none; color: black;">
                                 <h5 class="card-title">{{ $rel_value['title'] }}</h5>
                             </a>
                             <p class="card-text">
-                                {{ ucfirst($selected_category) }} | {{ \Carbon\Carbon::parse(env($rel_value['pubDate']))->locale('id')->translatedFormat('d F Y') }}
+                                {{-- {{ ucfirst($rel_value['category']) }} | {{ \Carbon\Carbon::parse(env($rel_value['pubDate']))->locale('id')->translatedFormat('d F Y') }} --}}
+                                {{ ucfirst(preg_replace('/(?<=[a-z])([A-Z])/', ' $1', $rel_value['category'])) }} | {{ \Carbon\Carbon::parse(env($rel_value['pubDate']))->locale('id')->translatedFormat('d F Y') }}
                             </p>
                         </div>
                     </div>
@@ -82,18 +90,19 @@
                     <div class="card mb-3 border-0 {{ $loop->first ? 'pt-3' : '' }} position-relative">
                         <div class="row g-0">
                             <div class="col-md-4">
-                                <img src="{{ url($pop_value['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/landing.png') }}'" class="img-fluid rounded pt-1" alt="...">
+                                <img src="{{ url($pop_value['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/nopic.png') }}'" class="img-fluid rounded pt-1" alt="...">
                                 <span class="position-absolute {{ $loop->first ? 'top-20' : '' }} start-0 translate-middle badge rounded-pill bg-black">
                                     {{ $loop->index + 1 }}
                                 </span>
                             </div>
                             <div class="col-md-8">
                                 <div class="card-body py-0">
-                                    <a href="/{{ $selected_source }}/{{ $selected_category }}/{{ $pop_key }}" class="stretched-link" style="text-decoration: none; color: black;">
+                                    <a href="/{{ $selected_source }}/{{ $pop_value['category'] }}/{{ $pop_value['id'] }}" class="stretched-link" style="text-decoration: none; color: black;">
                                         <h6 class="card-title">{{ $pop_value['title'] }}</h6>
                                     </a>
                                     <p class="card-text">
-                                        {{ ucfirst($selected_category) }} | {{ \Carbon\Carbon::parse(env($pop_value['pubDate']))->locale('id')->translatedFormat('d F Y') }}
+                                        {{-- {{ ucfirst($pop_value['category']) }} | {{ \Carbon\Carbon::parse(env($pop_value['pubDate']))->locale('id')->translatedFormat('d F Y') }} --}}
+                                        {{ ucfirst(preg_replace('/(?<=[a-z])([A-Z])/', ' $1', $pop_value['category'])) }} | {{ \Carbon\Carbon::parse(env($pop_value['pubDate']))->locale('id')->translatedFormat('d F Y') }}
                                     </p>
                                 </div>
                             </div>

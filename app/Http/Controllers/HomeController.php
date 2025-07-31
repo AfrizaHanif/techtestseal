@@ -51,7 +51,7 @@ class HomeController extends Controller
     public function redirect(Request $request, $source){
         // GET DATA
         $search = $request->input('search');
-        $all_posts = [];
+        // $all_posts = [];
         $selected_source = $source;
 
         // CONSUME EXTERNAL API FOR NAVIGATION
@@ -63,30 +63,36 @@ class HomeController extends Controller
             $sourceJson = $this->searchSource(json_decode($nav_response, true)['endpoints'], $source);
             $navJson = array_column($this->getSource(json_decode($nav_response, true)['endpoints']), 'name');
 
-            // LOOPING FOR GET ALL POSTS
-            foreach($sourceJson[0]['paths'] as $source_key => $source_value){
-                // CONSUME EXTERNAL API FOR POSTS IN SPECIFIC SOURCE AND EVERY CATEGORIES
-                $response = json_decode(Http::get('https://api-berita-indonesia.vercel.app/'.$source.'/'.$source_value['name']), true);
-                // dd(count($response['data']['posts']));
+            // dd($sourceJson);
+            $all_posts = $this->getAllPosts($sourceJson, $source);
+            // dd($all_posts);
 
-                // CHECK IF NO DATA IN CATEGORY
-                if ($response !== null && isset($response['data']['posts'])) {
-                    // ADD CATEGORY TO API
-                    foreach($response['data']['posts'] as $res_key => $res_value){
-                        $response['data']['posts'][$res_key]['category'] = $source_value['name'];
-                    }
+            // LOOPING FOR GET ALL POSTS (MOVE TO EXTERNAL FUNCTION (getAllPosts))
+            // foreach($sourceJson[0]['paths'] as $source_key => $source_value){
+            //     // CONSUME EXTERNAL API FOR POSTS IN SPECIFIC SOURCE AND EVERY CATEGORIES
+            //     $response = json_decode(Http::get('https://api-berita-indonesia.vercel.app/'.$source.'/'.$source_value['name']), true);
+            //     // dd(count($response['data']['posts']));
 
-                    // MERGE ARRAY DURING LOOPING
-                    $all_posts = array_merge($all_posts, $response['data']['posts']);
-                }
-                // dd($all_posts);
+            //     // CHECK IF NO DATA IN CATEGORY
+            //     if ($response !== null && isset($response['data']['posts'])) {
+            //         // ADD CATEGORY AND ID TO ARRAY
+            //         foreach($response['data']['posts'] as $res_key => $res_value){
+            //             $response['data']['posts'][$res_key]['category'] = $source_value['name'];
+            //             $response['data']['posts'][$res_key]['id'] = $res_key;
+            //         }
 
-                // array_push($all_posts, ['category' => $source_value['name']]);
-                // $all_posts[] = $source_value['name'];
+            //         // MERGE ARRAY DURING LOOPING
+            //         $all_posts = array_merge($all_posts, $response['data']['posts']);
+            //     }
+            //     // dd($all_posts);
 
-                // $response['data']['posts']['category'] = $source_value['name'];
-                // $all_posts = array_merge($all_posts, $response['data']['posts']);
-            }
+            //     // array_push($all_posts, ['category' => $source_value['name']]);
+            //     // $all_posts[] = $source_value['name'];
+
+            //     // $response['data']['posts']['category'] = $source_value['name'];
+            //     // $all_posts = array_merge($all_posts, $response['data']['posts']);
+            // }
+
             // dd($all_posts);
             // $column = array_column(array_column($all_posts, 'data'), 'posts');
 
@@ -169,6 +175,12 @@ class HomeController extends Controller
             $sourceJson = $this->searchSource(json_decode($nav_response, true)['endpoints'], $source);
             $navJson = array_column($this->getSource(json_decode($nav_response, true)['endpoints']), 'name');
 
+            // ADD ID FROM INDEX KEY TO ARRAY
+            foreach($jsonData as $res_key => $res_value){
+                $jsonData[$res_key]['id'] = $res_key;
+            }
+            // dd($jsonData);
+
             // IF SEARCH AVAILABLE
             if($search){
                 // LAUNCH FUNCTION TO SEARCH TITLE
@@ -227,18 +239,21 @@ class HomeController extends Controller
         $response = Http::get('https://api-berita-indonesia.vercel.app/'.$source.'/'.$category);
         $nav_response = Http::get('https://api-berita-indonesia.vercel.app/');
 
-
+        // CHECK API RESPONSE
         if($response->successful()){
             // DECODING JSON WITH LAUNCH A FUNCTION (SEARCH AND NAVIGATION)
             $sourceJson = $this->searchSource(json_decode($nav_response, true)['endpoints'], $source);
             $navJson = array_column($this->getSource(json_decode($nav_response, true)['endpoints']), 'name');
             $jsonData = json_decode($response, true)['data']['posts'][$index];
-            $jsonData1 = json_decode($response, true)['data']['posts'];
+            // $jsonData1 = json_decode($response, true)['data']['posts'];
+
+            $all_posts = $this->getAllPosts($sourceJson, $source);
+            // dd($all_posts);
 
             // SHUFFLE THE ARRAY FOR PICKING A RANDOM ITEMS
-            $popularJson = $jsonData1;
+            $popularJson = $all_posts;
             shuffle($popularJson);
-            $relatedJson = $jsonData1;
+            $relatedJson = $all_posts;
             shuffle($relatedJson);
             $exploreJson = array_column($sourceJson[0]['paths'], 'name');
             shuffle($exploreJson);
@@ -353,5 +368,28 @@ class HomeController extends Controller
         }else{
             return null;
         }
+    }
+
+    // TO GET ALL POSTS
+    function getAllPosts($pathJson, $source){
+        // $pathJson = json_decode($response, true)['endpoints'];
+        $all_posts = [];
+
+        foreach($pathJson[0]['paths'] as $path_key => $path_value){
+            $sourceJson = json_decode(Http::get('https://api-berita-indonesia.vercel.app/'.$source.'/'.$path_value['name']), true);
+
+            if ($sourceJson !== null && isset($sourceJson['data']['posts'])) {
+                // ADD CATEGORY AND ID TO ARRAY
+                foreach($sourceJson['data']['posts'] as $source_key => $source_value){
+                    $sourceJson['data']['posts'][$source_key]['category'] = $path_value['name'];
+                    $sourceJson['data']['posts'][$source_key]['id'] = $source_key;
+                }
+
+                // MERGE ARRAY DURING LOOPING
+                $all_posts = array_merge($all_posts, $sourceJson['data']['posts']);
+            }
+        }
+
+        return $all_posts;
     }
 }

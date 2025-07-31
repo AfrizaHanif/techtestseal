@@ -26,14 +26,22 @@
             <h6>Telusuri Sumber</h6>
             <ul class="nav flex-column">
                 @foreach ($explore as $exp_key => $exp_Value)
-                <li class="nav-item mb-2"><a href="/{{ $exp_Value }}" class="nav-link p-0 text-body-secondary">{{ ucfirst($exp_Value) }}</a></li>
+                <li class="nav-item mb-2">
+                    <a href="/{{ $exp_Value }}" class="nav-link p-0 text-body-secondary">
+                        @if (strlen(ucfirst($exp_Value)) > 4)
+                        {{ ucfirst($exp_Value) }}
+                        @else
+                        {{ strtoupper($exp_Value) }}
+                        @endif
+                    </a>
+                </li>
                 @endforeach
             </ul>
             @else
             <h6>Telusuri Kategori</h6>
             <ul class="nav flex-column">
                 @foreach ($explore as $exp_key => $exp_Value)
-                <li class="nav-item mb-2"><a href="/{{ $exp_Value }}" class="nav-link p-0 text-body-secondary">{{ ucfirst($exp_Value) }}</a></li>
+                <li class="nav-item mb-2"><a href="/{{ $selected_source }}/{{ $exp_Value }}" class="nav-link p-0 text-body-secondary">{{ ucfirst($exp_Value) }}</a></li>
                 @endforeach
             </ul>
             @endif

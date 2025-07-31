@@ -3,7 +3,7 @@
 
 <!--TITLE-->
 @section('title')
-<title>{{ ucfirst($selected_category) }} ({{ ucfirst($selected_source) }}) | Berita Kini</title>
+<title>{{ ucfirst(preg_replace('/(?<=[a-z])([A-Z])/', ' $1', $selected_category)) }} ({{ ucfirst($selected_source) }}) | Berita Kini</title>
 @endsection
 
 <!--CONTENTS-->
