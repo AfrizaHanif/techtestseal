@@ -266,8 +266,18 @@ class HomeController extends Controller
             // DECODING JSON WITH LAUNCH A FUNCTION (SEARCH AND NAVIGATION)
             $sourceJson = $this->searchSource(json_decode($nav_response, true)['endpoints'], $source);
             $navJson = array_column($this->getSource(json_decode($nav_response, true)['endpoints']), 'name');
-            $jsonData = json_decode($response, true)['data']['posts'][$index];
+            // $jsonData = json_decode($response, true)['data']['posts'][$index];
+            $responseArray = json_decode($response, true);
+            $jsonData = null;
             // $jsonData1 = json_decode($response, true)['data']['posts'];
+
+            if(
+                is_array($responseArray) &&
+                isset($responseArray['data']['posts']) &&
+                isset($responseArray['data']['posts'][$index])
+            ){
+                $jsonData = $responseArray['data']['posts'][$index];
+            }
 
             $all_posts = $this->getAllPosts($sourceJson, $source);
             // dd($all_posts);
@@ -285,7 +295,18 @@ class HomeController extends Controller
             $related = array_slice($relatedJson, 0, 3);
             $explore = array_slice($exploreJson, 0, 5);
 
-            // dd($related);
+            // VERIFY IF POST NOT AVAILABLE (NULL)
+            if(!$jsonData){
+                $error = 'Tidak ada postingan yang terdaftar';
+
+                return view('pages.empty', compact([
+                    'navJson',
+                    'explore',
+                    'sourceJson',
+                    'selected_source',
+                    'error',
+                ]));
+            }
         }elseif($response->failed()){
             if($response->clientError()){
 
