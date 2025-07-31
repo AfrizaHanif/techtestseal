@@ -7,8 +7,8 @@
                 <a href="/{{ $random[0] }}" type="button" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold">Acak Sumber</a>
             </div>
         </div>
-        <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
-            <img class="rounded-lg-3" src="{{ asset('images/landing.png') }}" alt="" width="800">
+        <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg" style="border-radius: 8px 0 8px 0">
+            <img class="" src="{{ asset('images/landing.png') }}" alt="" width="800">
         </div>
     </div>
 </div>
