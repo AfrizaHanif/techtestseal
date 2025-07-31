@@ -7,3 +7,4 @@
 <!--SOURCES-->
 <script src="{{asset('sources/js/tooltips.js')}}"></script>
 <script src="{{asset('sources/js/scroll-header.js')}}"></script>
+<script src="{{asset('sources/js/color-mode.js')}}"></script>

@@ -1,11 +1,11 @@
 @for ($i = 1; $i <= 2; $i++)
     @if ($i == 1)
-    <div>
+    <div class="bg-light-subtle text-light-emphasis">
     @else
-    <div id="scroll_header" class="fixed-top" style="background-color: white">
+    <div id="scroll_header" class="fixed-top bg-light-subtle text-light-emphasis">
     @endif
         @if ($i == 1)
-        <nav class="py-2 bg-body-tertiary border-bottom">
+        <nav class="py-2 bg-dark-subtle text-dark-emphasis border-bottom">
             <div class="container d-flex flex-wrap">
                 <ul class="nav me-auto">
                     @foreach ($navJson as $nav_key => $nav_value)
@@ -21,13 +21,34 @@
                     @endforeach
                 </ul>
                 <ul class="nav">
-
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" id="themeDropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-circle-half theme-icon-active"></i>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="themeDropdown">
+                            <li>
+                                <button class="dropdown-item" type="button" data-bs-theme-value="light">
+                                    <i class="bi bi-sun-fill theme-icon"></i> Light
+                                </button>
+                            </li>
+                            <li>
+                                <button class="dropdown-item" type="button" data-bs-theme-value="dark">
+                                    <i class="bi bi-moon-stars-fill theme-icon"></i> Dark
+                                </button>
+                            </li>
+                            <li>
+                                <button class="dropdown-item active" type="button" data-bs-theme-value="auto">
+                                    <i class="bi bi-circle-half theme-icon"></i> Auto
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                 </ul>
             </div>
         </nav>
         @endif
         <div class="container">
-            <header class="d-flex flex-wrap justify-content-center py-3 border-bottom" style="background-color: white">
+            <header class="d-flex flex-wrap justify-content-center py-3 border-bottom">
                 <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
                     <svg class="bi me-2" width="40" height="40" aria-hidden="true"><use xlink:href="#newspaper"></use></svg>
                     <span class="fs-4">Berita Kini</span>
@@ -60,7 +81,11 @@
                         @if (count($sourceJson[0]['paths']) < 5)
                             @foreach ($sourceJson[0]['paths'] as $source_key => $source_value)
                             <li class="nav-item">
+                                @if (isset($check_category[$source_value['name']]) && $check_category[$source_value['name']] > 0)
                                 <a href="{{ $source_value['path'] }}" class="nav-link {{ (request()->is($selected_source.'/'.$source_value['name'].'*')) ? 'active' : '' }}" aria-current="{{ (request()->is($selected_source.'/'.$source_value['name'].'*')) ? 'page' : '' }}">
+                                @else
+                                <a href="#" class="nav-link disabled">
+                                @endif
                                     {{ ucfirst($source_value['name']) }}
                                 </a>
                             </li>
@@ -70,10 +95,14 @@
                             <a class="nav-link dropdown-toggle {{ (request()->is($selected_source.'/*')) ? 'active' : '' }}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Kategori
                             </a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu" style="max-height: 300px; overflow-y: auto;">
                                 @foreach ($sourceJson[0]['paths'] as $source_key => $source_value)
                                 <li>
+                                    @if (isset($check_category[$source_value['name']]) && $check_category[$source_value['name']] > 0)
                                     <a class="dropdown-item {{ (request()->is($selected_source.'/'.$source_value['name'].'*')) ? 'active' : '' }}" href="{{ $source_value['path'] }}">
+                                    @else
+                                    <a class="dropdown-item disabled" href="#">
+                                    @endif
                                         {{-- {{ ucfirst($source_value['name']) }} --}}
                                         {{ ucfirst(preg_replace('/(?<=[a-z])([A-Z])/', ' $1', $source_value['name'])) }}
                                     </a>

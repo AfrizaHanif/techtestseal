@@ -67,6 +67,8 @@ class HomeController extends Controller
             $all_posts = $this->getAllPosts($sourceJson, $source);
             // dd($all_posts);
 
+            // dd(array_count_values(array_column($all_posts, 'category'))['terbaru']);
+
             // LOOPING FOR GET ALL POSTS (MOVE TO EXTERNAL FUNCTION (getAllPosts))
             // foreach($sourceJson[0]['paths'] as $source_key => $source_value){
             //     // CONSUME EXTERNAL API FOR POSTS IN SPECIFIC SOURCE AND EVERY CATEGORIES
@@ -121,6 +123,9 @@ class HomeController extends Controller
             $populars = array_slice($popularJson, 0, 3);
             $explore = array_slice($exploreJson, 0, 5);
 
+            // CHECK AMOUNT OF POST IN EVERY CATEGORIES
+            $check_category = array_count_values(array_column($all_posts, 'category'));
+
             // VERIFY IF POSTS NOT AVAILABLE (NULL)
             if(count($all_posts) == 0){
                 $error = 'Tidak ada postingan dari sumber tersebut. Mohon untuk mengunjungi sumber ini beberapa saat lagi';
@@ -130,6 +135,7 @@ class HomeController extends Controller
                     'explore',
                     'sourceJson',
                     'selected_source',
+                    'check_category',
                     'error',
                 ]));
             }
@@ -155,6 +161,7 @@ class HomeController extends Controller
             'headlines',
             'populars',
             'explore',
+            'check_category',
         ]));
     }
 
@@ -183,6 +190,8 @@ class HomeController extends Controller
 
             $sourceJson = $this->searchSource(json_decode($nav_response, true)['endpoints'], $source);
             $navJson = array_column($this->getSource(json_decode($nav_response, true)['endpoints']), 'name');
+
+            $all_posts = $this->getAllPosts($sourceJson, $source);
 
             // ADD ID FROM INDEX KEY TO ARRAY
             foreach($jsonData as $res_key => $res_value){
@@ -215,6 +224,9 @@ class HomeController extends Controller
             $populars = array_slice($popularJson, 0, 3);
             $explore = array_slice($exploreJson, 0, 5);
 
+            // CHECK AMOUNT OF POST IN EVERY CATEGORIES
+            $check_category = array_count_values(array_column($all_posts, 'category'));
+
             // VERIFY IF POSTS NOT AVAILABLE (NULL)
             if(count($jsonData) == 0){
                 $error = 'Tidak ada postingan dari kategori di sumber tersebut. Mohon untuk mengunjungi kategori ini beberapa saat lagi';
@@ -225,6 +237,7 @@ class HomeController extends Controller
                     'sourceJson',
                     'selected_source',
                     'error',
+                    'check_category',
                 ]));
             }
         }elseif($response->failed()){
@@ -248,6 +261,7 @@ class HomeController extends Controller
             'headlines',
             'populars',
             'explore',
+            'check_category',
         ]));
     }
 
@@ -295,6 +309,9 @@ class HomeController extends Controller
             $related = array_slice($relatedJson, 0, 3);
             $explore = array_slice($exploreJson, 0, 5);
 
+            // CHECK AMOUNT OF POST IN EVERY CATEGORIES
+            $check_category = array_count_values(array_column($all_posts, 'category'));
+
             // VERIFY IF POST NOT AVAILABLE (NULL)
             if(!$jsonData){
                 $error = 'Tidak ada postingan yang terdaftar';
@@ -305,6 +322,7 @@ class HomeController extends Controller
                     'sourceJson',
                     'selected_source',
                     'error',
+                    'check_category',
                 ]));
             }
         }elseif($response->failed()){
@@ -328,6 +346,7 @@ class HomeController extends Controller
             'populars',
             'related',
             'explore',
+            'check_category',
         ]));
     }
 

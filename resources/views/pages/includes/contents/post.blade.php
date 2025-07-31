@@ -26,7 +26,7 @@
         {{-- MAIN CONTENT --}}
         <div class="col-8">
             {{-- BERITA DIPILIH --}}
-            <h1 class="display-6 fw-bold text-body-emphasis lh-1 mb-3">{{ $jsonData['title'] }}</h1>
+            <h1 class="display-6 fw-bold text-body-emphasis lh-1 mb-3">{{ html_entity_decode($jsonData['title']) }}</h1>
             <p>{{ ucfirst($selected_category) }} | {{ \Carbon\Carbon::parse(env($jsonData['pubDate']))->locale('id')->translatedFormat('d F Y') }}</p>
             <img src="{{ url($jsonData['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/nopic.png') }}'" class="d-block mx-lg-auto rounded img-fluid" alt="Bootstrap Themes" loading="lazy">
             <br/>
@@ -70,8 +70,8 @@
                     <div class="card h-100 border-0">
                         <img src="{{ url($rel_value['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/nopic.png') }}'" class="card-img-top card-img-bottom" alt="...">
                         <div class="card-body">
-                            <a href="/{{ $selected_source }}/{{ $rel_value['category'] }}/{{ $rel_value['id'] }}" class="stretched-link" style="text-decoration: none; color: black;">
-                                <h5 class="card-title">{{ $rel_value['title'] }}</h5>
+                            <a href="/{{ $selected_source }}/{{ $rel_value['category'] }}/{{ $rel_value['id'] }}" class="stretched-link text-body-emphasis" style="text-decoration: none;">
+                                <h5 class="card-title">{{ html_entity_decode($rel_value['title']) }}</h5>
                             </a>
                             <p class="card-text">
                                 {{-- {{ ucfirst($rel_value['category']) }} | {{ \Carbon\Carbon::parse(env($rel_value['pubDate']))->locale('id')->translatedFormat('d F Y') }} --}}
@@ -91,14 +91,14 @@
                         <div class="row g-0">
                             <div class="col-md-4">
                                 <img src="{{ url($pop_value['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/nopic.png') }}'" class="img-fluid rounded pt-1" alt="...">
-                                <span class="position-absolute {{ $loop->first ? 'top-20' : '' }} start-0 translate-middle badge rounded-pill bg-black">
+                                <span class="position-absolute {{ $loop->first ? 'top-20' : '' }} start-0 translate-middle badge rounded-pill bg-primary text-white">
                                     {{ $loop->index + 1 }}
                                 </span>
                             </div>
                             <div class="col-md-8">
                                 <div class="card-body py-0">
-                                    <a href="/{{ $selected_source }}/{{ $pop_value['category'] }}/{{ $pop_value['id'] }}" class="stretched-link" style="text-decoration: none; color: black;">
-                                        <h6 class="card-title">{{ $pop_value['title'] }}</h6>
+                                    <a href="/{{ $selected_source }}/{{ $pop_value['category'] }}/{{ $pop_value['id'] }}" class="stretched-link text-body-emphasis" style="text-decoration: none;">
+                                        <h6 class="card-title">{{ html_entity_decode(html_entity_decode($pop_value['title'])) }}</h6>
                                     </a>
                                     <p class="card-text">
                                         {{-- {{ ucfirst($pop_value['category']) }} | {{ \Carbon\Carbon::parse(env($pop_value['pubDate']))->locale('id')->translatedFormat('d F Y') }} --}}

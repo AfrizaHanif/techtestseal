@@ -3,7 +3,7 @@
 
 <!--TITLE-->
 @section('title')
-<title>{{ $jsonData['title'] }} | Berita Kini</title>
+<title>{{ html_entity_decode($jsonData['title']) }} | Berita Kini</title>
 @endsection
 
 <!--CONTENTS-->
