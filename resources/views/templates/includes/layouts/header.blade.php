@@ -1,11 +1,11 @@
 @for ($i = 1; $i <= 2; $i++)
     @if ($i == 1)
-    <div class="bg-light-subtle text-light-emphasis">
+    <div class="bg-body text-body">
     @else
-    <div id="scroll_header" class="fixed-top bg-light-subtle text-light-emphasis">
+    <div id="scroll_header" class="fixed-top bg-body text-body">
     @endif
         @if ($i == 1)
-        <nav class="py-2 bg-dark-subtle text-dark-emphasis border-bottom">
+        <nav class="py-2 bg-body-secondary border-bottom">
             <div class="container d-flex flex-wrap">
                 <ul class="nav me-auto">
                     @foreach ($navJson as $nav_key => $nav_value)
