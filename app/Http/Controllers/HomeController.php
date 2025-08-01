@@ -37,15 +37,11 @@ class HomeController extends Controller
                 $error = '('.http_response_code().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
             }
             return view('pages.error', compact([
-                'navJson',
-                'explore',
                 'error',
             ]));
         }else{
             $error = '('.http_response_code().') Terdapat gagal koneksi yang tidak diketahui';
             return view('pages.error', compact([
-                'navJson',
-                'explore',
                 'error',
             ]));
         }
@@ -157,21 +153,11 @@ class HomeController extends Controller
                 $error = '('.http_response_code().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
             }
             return view('pages.error', compact([
-                'navJson',
-                'explore',
-                'sourceJson',
-                'selected_source',
-                'check_category',
                 'error',
             ]));
         }else{
             $error = '('.http_response_code().') Terdapat gagal koneksi yang tidak diketahui';
             return view('pages.error', compact([
-                'navJson',
-                'explore',
-                'sourceJson',
-                'selected_source',
-                'check_category',
                 'error',
             ]));
         }
@@ -275,22 +261,12 @@ class HomeController extends Controller
                 $error = '('.http_response_code().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
             }
             return view('pages.error', compact([
-                    'navJson',
-                    'explore',
-                    'sourceJson',
-                    'selected_source',
                     'error',
-                    'check_category',
                 ]));
         }else{
             $error = '('.http_response_code().') Terdapat gagal koneksi yang tidak diketahui';
             return view('pages.error', compact([
-                'navJson',
-                'explore',
-                'sourceJson',
-                'selected_source',
                 'error',
-                'check_category',
             ]));
         }
 
@@ -376,15 +352,13 @@ class HomeController extends Controller
             }elseif($response->serverError()){
                 $error = '('.http_response_code().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
             }
+            return view('pages.error', compact([
+                'error',
+            ]));
         }else{
             $error = '('.http_response_code().') Terdapat gagal koneksi yang tidak diketahui';
             return view('pages.error', compact([
-                'navJson',
-                'explore',
-                'sourceJson',
-                'selected_source',
                 'error',
-                'check_category',
             ]));
         }
 
