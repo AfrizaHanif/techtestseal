@@ -22,4 +22,5 @@
 <link rel="stylesheet" href="{{asset('sources/css/heroes.css')}}">
 <link rel="stylesheet" href="{{asset('sources/css/list-groups.css')}}">
 <link rel="stylesheet" href="{{asset('sources/css/modal.css')}}">
+<link rel="stylesheet" href="{{asset('sources/css/preloader.css')}}">
 <link rel="stylesheet" href="{{asset('sources/css/scroll-header.css')}}">

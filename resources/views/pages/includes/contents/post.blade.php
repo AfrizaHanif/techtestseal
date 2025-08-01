@@ -3,16 +3,16 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb breadcrumb-chevron p-3 bg-body-tertiary rounded-3">
             <li class="breadcrumb-item">
-                <a class="link-body-emphasis" href="#">
+                <a class="link-body-emphasis show-preloader" href="/">
                     <svg class="bi" width="16" height="16" aria-hidden="true"><use xlink:href="#house-door-fill"></use></svg>
                     <span class="visually-hidden">Beranda</span>
                 </a>
             </li>
             <li class="breadcrumb-item">
-                <a class="link-body-emphasis fw-semibold text-decoration-none" href="/{{ $selected_source }}">{{ ucfirst($selected_source) }}</a>
+                <a class="link-body-emphasis fw-semibold text-decoration-none show-preloader" href="/{{ $selected_source }}">{{ ucfirst($selected_source) }}</a>
             </li>
             <li class="breadcrumb-item">
-                <a class="link-body-emphasis fw-semibold text-decoration-none" href="/{{ $selected_source }}/{{ $selected_category }}">{{ ucfirst(preg_replace('/(?<=[a-z])([A-Z])/', ' $1', $selected_category)) }}</a>
+                <a class="link-body-emphasis fw-semibold text-decoration-none show-preloader" href="/{{ $selected_source }}/{{ $selected_category }}">{{ ucfirst(preg_replace('/(?<=[a-z])([A-Z])/', ' $1', $selected_category)) }}</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
             Detail
@@ -31,7 +31,7 @@
             <img src="{{ url($jsonData['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/nopic.png') }}'" class="d-block mx-lg-auto rounded img-fluid" alt="Bootstrap Themes" loading="lazy">
             <br/>
             <p>{{ html_entity_decode($jsonData['description']) }}</p>
-            <a href="{{ url($jsonData['link']) }}" type="button" class="btn btn-secondary btn-sm" target="_blank" rel="noopener noreferrer">
+            <a href="{{ url($jsonData['link']) }}" type="button" class="btn btn-secondary btn-sm show-preloader" target="_blank" rel="noopener noreferrer">
                 <i class="bi bi-box-arrow-up-right"></i>
                 Kunjungi Sumber
             </a>
@@ -61,7 +61,7 @@
                 </div>
                 <div class="col-4">
                     {{-- <a href="/{{ $selected_source }}/{{ $selected_category }}" type="button" class="btn btn-primary float-end">Lihat Semua</a> --}}
-                    <a href="/{{ $selected_source }}" type="button" class="btn btn-primary float-end">Lihat Semua</a>
+                    <a href="/{{ $selected_source }}" type="button" class="btn btn-primary float-end show-preloader">Lihat Semua</a>
                 </div>
             </div>
             <div class="row row-cols-1 row-cols-md-3 g-4 pt-3 pb-3">
@@ -70,7 +70,7 @@
                     <div class="card h-100 border-0">
                         <img src="{{ url($rel_value['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/nopic.png') }}'" class="card-img-top card-img-bottom" alt="...">
                         <div class="card-body">
-                            <a href="/{{ $selected_source }}/{{ $rel_value['category'] }}/{{ $rel_value['id'] }}" class="stretched-link text-body-emphasis" style="text-decoration: none;">
+                            <a href="/{{ $selected_source }}/{{ $rel_value['category'] }}/{{ $rel_value['id'] }}" class="stretched-link text-body-emphasis show-preloader" style="text-decoration: none;">
                                 <h5 class="card-title">{{ html_entity_decode($rel_value['title']) }}</h5>
                             </a>
                             <p class="card-text">
@@ -97,7 +97,7 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="card-body py-0">
-                                    <a href="/{{ $selected_source }}/{{ $pop_value['category'] }}/{{ $pop_value['id'] }}" class="stretched-link text-body-emphasis" style="text-decoration: none;">
+                                    <a href="/{{ $selected_source }}/{{ $pop_value['category'] }}/{{ $pop_value['id'] }}" class="stretched-link text-body-emphasis show-preloader" style="text-decoration: none;">
                                         <h6 class="card-title">{{ html_entity_decode(html_entity_decode($pop_value['title'])) }}</h6>
                                     </a>
                                     <p class="card-text">

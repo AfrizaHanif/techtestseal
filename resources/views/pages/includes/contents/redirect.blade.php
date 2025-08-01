@@ -3,7 +3,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb breadcrumb-chevron p-3 bg-body-tertiary rounded-3">
             <li class="breadcrumb-item">
-                <a class="link-body-emphasis" href="#">
+                <a class="link-body-emphasis show-preloader" href="/">
                     <svg class="bi" width="16" height="16" aria-hidden="true"><use xlink:href="#house-door-fill"></use></svg>
                     <span class="visually-hidden">Beranda</span>
                 </a>
@@ -43,7 +43,7 @@
                             {{ \Carbon\Carbon::parse(env($head_value['pubDate']))->locale('id')->translatedFormat('d F Y') }}
                         </p>
                         <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-                            <a href="/{{ $selected_source }}/{{ $head_value['category'] }}/{{ $head_value['id'] }}" type="button" class="btn btn-primary btn-lg px-4 me-md-2">
+                            <a href="/{{ $selected_source }}/{{ $head_value['category'] }}/{{ $head_value['id'] }}" type="button" class="btn btn-primary btn-lg px-4 me-md-2 show-preloader">
                                 <i class="bi bi-arrow-up-right"></i>
                                 Baca Selengkapnya
                             </a>
@@ -95,7 +95,7 @@
                 </div>
                 <div class="col-md-8">
                     <div class="card-body py-0">
-                        <a href="/{{ $selected_source }}/{{ $pop_value['category'] }}/{{ $pop_value['id'] }}" class="stretched-link text-body-emphasis" style="text-decoration: none;">
+                        <a href="/{{ $selected_source }}/{{ $pop_value['category'] }}/{{ $pop_value['id'] }}" class="stretched-link text-body-emphasis show-preloader" style="text-decoration: none;">
                             <h6 class="card-title">{{ html_entity_decode($pop_value['title']) }}</h6>
                         </a>
                         <p class="card-text">
@@ -140,7 +140,7 @@
             <div class="card h-100 border-0">
                 <img src="{{ url($json_value['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/nopic.png') }}'" class="card-img-top card-img-bottom" alt="...">
                 <div class="card-body">
-                    <a href="/{{ $selected_source }}/{{ $json_value['category'] }}/{{ $json_value['id'] }}" class="stretched-link text-body-emphasis" style="text-decoration: none;">
+                    <a href="/{{ $selected_source }}/{{ $json_value['category'] }}/{{ $json_value['id'] }}" class="stretched-link text-body-emphasis show-preloader" style="text-decoration: none;">
                         <h5 class="card-title">{{ html_entity_decode($json_value['title']) }}</h5>
                     </a>
                     <p class="card-text">
@@ -159,7 +159,7 @@
                 <div class="card h-100 border-0">
                     <img src="{{ url($json_value['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/nopic.png') }}'" class="card-img-top card-img-bottom" alt="...">
                     <div class="card-body">
-                        <a href="/{{ $selected_source }}/{{ $json_value['category'] }}/{{ $json_value['id'] }}" class="stretched-link text-body-emphasis" style="text-decoration: none;">
+                        <a href="/{{ $selected_source }}/{{ $json_value['category'] }}/{{ $json_value['id'] }}" class="stretched-link text-body-emphasis show-preloader" style="text-decoration: none;">
                             <h5 class="card-title">{{ html_entity_decode($json_value['title']) }}</h5>
                         </a>
                         <p class="card-text">

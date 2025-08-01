@@ -8,3 +8,4 @@
 <script src="{{asset('sources/js/tooltips.js')}}"></script>
 <script src="{{asset('sources/js/scroll-header.js')}}"></script>
 <script src="{{asset('sources/js/color-mode.js')}}"></script>
+<script src="{{asset('sources/js/preloader.js')}}"></script>

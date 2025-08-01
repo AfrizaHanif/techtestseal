@@ -5,8 +5,8 @@
             <h1 class="display-4 fw-bold lh-1 text-white">Tidak Ada Berita</h1>
             <p class="lead">{{ $error }}. Anda dapat mengunjungi sumber lainnya untuk sementara waktu.</p>
             <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
-                <a href="/" type="button" class="btn btn-light btn-lg px-4 me-md-2 fw-bold">Kembali ke Halaman Utama</a>
-                <a href="{{ Request::url() }}" type="button" class="btn btn-light btn-lg px-4">
+                <a href="/" type="button" class="btn btn-light btn-lg px-4 me-md-2 fw-bold show-preloader">Kembali ke Halaman Utama</a>
+                <a href="{{ Request::url() }}" type="button" class="btn btn-light btn-lg px-4 show-preloader">
                     <i class="bi bi-arrow-clockwise"></i>
                     Refresh
                 </a>

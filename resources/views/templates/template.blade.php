@@ -13,6 +13,8 @@
         @include('templates.includes.sources.css')
     </head>
     <body class="d-flex flex-column min-vh-100">
+    {{-- PRELOADER --}}
+    @include('templates.includes.components.spinner')
     <!--SVG ICONS-->
     @include('templates.includes.svgs.bootstrap-icon')
     <!--HEADER-->

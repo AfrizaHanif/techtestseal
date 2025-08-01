@@ -11,7 +11,7 @@
                     @if ($navJson)
                     @foreach ($navJson as $nav_key => $nav_value)
                         <li class="nav-item">
-                            <a href="/{{ $nav_value }}" class="nav-link link-body-emphasis px-2 {{ (request()->is($nav_value.'*')) ? 'active' : '' }}" aria-current="{{ (request()->is($nav_value.'*')) ? 'page' : '' }}">
+                            <a href="/{{ $nav_value }}" class="nav-link link-body-emphasis px-2 show-preloader {{ (request()->is($nav_value.'*')) ? 'active' : '' }}" aria-current="{{ (request()->is($nav_value.'*')) ? 'page' : '' }}">
                                 @if (strlen(ucfirst($nav_value)) > 4)
                                 {{ ucfirst($nav_value) }}
                                 @else
@@ -51,7 +51,7 @@
         @endif
         <div class="container">
             <header class="d-flex flex-wrap justify-content-center py-3 border-bottom">
-                <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+                <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none show-preloader">
                     <svg class="bi me-2" width="40" height="40" aria-hidden="true"><use xlink:href="#newspaper"></use></svg>
                     <span class="fs-4">Berita Kini</span>
                 </a>
@@ -77,7 +77,7 @@
                     @else
                         @if ($sourceJson && $selected_source)
                         <li class="nav-item">
-                            <a href="/{{ $selected_source }}" class="nav-link {{ (request()->is($selected_source.'')) ? 'active' : '' }}" aria-current="page">
+                            <a href="/{{ $selected_source }}" class="nav-link show-preloader {{ (request()->is($selected_source.'')) ? 'active' : '' }}" aria-current="page">
                                 Beranda
                             </a>
                         </li>
@@ -86,7 +86,7 @@
                                 @if ($loop->iteration < 5)
                                 <li class="nav-item">
                                     @if (isset($check_category[$source_value['name']]) && $check_category[$source_value['name']] > 0)
-                                    <a href="{{ $source_value['path'] }}" class="nav-link {{ (request()->is($selected_source.'/'.$source_value['name'].'*')) ? 'active' : '' }}" aria-current="{{ (request()->is($selected_source.'/'.$source_value['name'].'*')) ? 'page' : '' }}">
+                                    <a href="{{ $source_value['path'] }}" class="nav-link show-preloader {{ (request()->is($selected_source.'/'.$source_value['name'].'*')) ? 'active' : '' }}" aria-current="{{ (request()->is($selected_source.'/'.$source_value['name'].'*')) ? 'page' : '' }}">
                                     @else
                                     <a href="#" class="nav-link disabled">
                                     @endif
@@ -105,7 +105,7 @@
                                     @if ($loop->iteration >= 5)
                                         @if (isset($check_category[$source_value['name']]) && $check_category[$source_value['name']] > 0)
                                         <li>
-                                            <a class="dropdown-item {{ (request()->is($selected_source.'/'.$source_value['name'].'*')) ? 'active' : '' }}" href="{{ $source_value['path'] }}">
+                                            <a class="dropdown-item show-preloader {{ (request()->is($selected_source.'/'.$source_value['name'].'*')) ? 'active' : '' }}" href="{{ $source_value['path'] }}">
                                             @else
                                             <a class="dropdown-item disabled" href="#">
                                             @endif
