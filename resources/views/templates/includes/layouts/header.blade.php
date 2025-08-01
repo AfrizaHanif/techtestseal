@@ -8,7 +8,7 @@
         <nav class="py-2 bg-body-secondary border-bottom">
             <div class="container d-flex flex-wrap">
                 <ul class="nav me-auto">
-                    @if ($navJson)
+                    @if ($navJson = $navJson ?? [])
                     @foreach ($navJson as $nav_key => $nav_value)
                         <li class="nav-item">
                             <a href="/{{ $nav_value }}" class="nav-link link-body-emphasis px-2 show-preloader {{ (request()->is($nav_value.'*')) ? 'active' : '' }}" aria-current="{{ (request()->is($nav_value.'*')) ? 'page' : '' }}">
@@ -75,7 +75,7 @@
                         </ul>
                     </li> --}}
                     @else
-                        @if ($sourceJson && $selected_source)
+                        @if ($sourceJson = $sourceJson ?? [] && $selected_source = $selected_source ?? [])
                         <li class="nav-item">
                             <a href="/{{ $selected_source }}" class="nav-link show-preloader {{ (request()->is($selected_source.'')) ? 'active' : '' }}" aria-current="page">
                                 Beranda

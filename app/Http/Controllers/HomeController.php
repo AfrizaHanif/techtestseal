@@ -462,23 +462,45 @@ class HomeController extends Controller
     // TO GET ALL POSTS
     function getAllPosts($pathJson, $source){
         // $pathJson = json_decode($response, true)['endpoints'];
+        // CREATE AN ARRAY
         $all_posts = [];
 
+        // LOOP A PATH FOR RESPONSE
         foreach($pathJson[0]['paths'] as $path_key => $path_value){
-            $sourceJson = json_decode(Http::get('https://api-berita-indonesia.vercel.app/'.$source.'/'.$path_value['name']), true);
+            $response = Http::get('https://api-berita-indonesia.vercel.app/'.$source.'/'.$path_value['name']);
 
-            if ($sourceJson !== null && isset($sourceJson['data']['posts'])) {
-                // ADD CATEGORY AND ID TO ARRAY
-                foreach($sourceJson['data']['posts'] as $source_key => $source_value){
-                    $sourceJson['data']['posts'][$source_key]['category'] = $path_value['name'];
-                    $sourceJson['data']['posts'][$source_key]['id'] = $source_key;
+            // CHECK API CONNECTION
+            if($response->successful()){
+                // DECODE JSON
+                $sourceJson = json_decode($response, true);
+
+                // CHECK IF SOURCE NOT NULL
+                if ($sourceJson !== null && isset($sourceJson['data']['posts'])) {
+                    // ADD CATEGORY AND ID TO ARRAY
+                    foreach($sourceJson['data']['posts'] as $source_key => $source_value){
+                        $sourceJson['data']['posts'][$source_key]['category'] = $path_value['name'];
+                        $sourceJson['data']['posts'][$source_key]['id'] = $source_key;
+                    }
+
+                    // MERGE ARRAY DURING LOOPING
+                    $all_posts = array_merge($all_posts, $sourceJson['data']['posts']);
                 }
-
-                // MERGE ARRAY DURING LOOPING
-                $all_posts = array_merge($all_posts, $sourceJson['data']['posts']);
+            }elseif($response->failed()){
+                if($response->clientError()){
+                    $error = '('.http_response_code().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
+                }elseif($response->serverError()){
+                    $error = '('.http_response_code().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
+                }
+                return view('pages.error', compact([
+                    'error',
+                ]));
+            }else{
+                $error = '('.http_response_code().') Terdapat gagal koneksi yang tidak diketahui';
+                return view('pages.error', compact([
+                    'error',
+                ]));
             }
         }
-
         return $all_posts;
     }
 }
