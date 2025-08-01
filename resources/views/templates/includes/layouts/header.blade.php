@@ -8,6 +8,7 @@
         <nav class="py-2 bg-body-secondary border-bottom">
             <div class="container d-flex flex-wrap">
                 <ul class="nav me-auto">
+                    @if ($navJson)
                     @foreach ($navJson as $nav_key => $nav_value)
                         <li class="nav-item">
                             <a href="/{{ $nav_value }}" class="nav-link link-body-emphasis px-2 {{ (request()->is($nav_value.'*')) ? 'active' : '' }}" aria-current="{{ (request()->is($nav_value.'*')) ? 'page' : '' }}">
@@ -19,6 +20,7 @@
                             </a>
                         </li>
                     @endforeach
+                    @endif
                 </ul>
                 <ul class="nav">
                     <div class="dropdown">
@@ -73,43 +75,49 @@
                         </ul>
                     </li> --}}
                     @else
-                    <li class="nav-item">
-                        <a href="/{{ $selected_source }}" class="nav-link {{ (request()->is($selected_source.'')) ? 'active' : '' }}" aria-current="page">
-                            Beranda
-                        </a>
-                    </li>
-                        @if (count($sourceJson[0]['paths']) < 5)
-                            @foreach ($sourceJson[0]['paths'] as $source_key => $source_value)
-                            <li class="nav-item">
-                                @if (isset($check_category[$source_value['name']]) && $check_category[$source_value['name']] > 0)
-                                <a href="{{ $source_value['path'] }}" class="nav-link {{ (request()->is($selected_source.'/'.$source_value['name'].'*')) ? 'active' : '' }}" aria-current="{{ (request()->is($selected_source.'/'.$source_value['name'].'*')) ? 'page' : '' }}">
-                                @else
-                                <a href="#" class="nav-link disabled">
-                                @endif
-                                    {{ ucfirst($source_value['name']) }}
-                                </a>
-                            </li>
-                            @endforeach
-                        @else
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle {{ (request()->is($selected_source.'/*')) ? 'active' : '' }}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Kategori
+                        @if ($sourceJson && $selected_source)
+                        <li class="nav-item">
+                            <a href="/{{ $selected_source }}" class="nav-link {{ (request()->is($selected_source.'')) ? 'active' : '' }}" aria-current="page">
+                                Beranda
                             </a>
-                            <ul class="dropdown-menu" style="max-height: 300px; overflow-y: auto;">
-                                @foreach ($sourceJson[0]['paths'] as $source_key => $source_value)
-                                <li>
+                        </li>
+                            {{-- NEW VERSION (BETA) --}}
+                            @foreach ($sourceJson[0]['paths'] as $source_key => $source_value)
+                                @if ($loop->iteration < 5)
+                                <li class="nav-item">
                                     @if (isset($check_category[$source_value['name']]) && $check_category[$source_value['name']] > 0)
-                                    <a class="dropdown-item {{ (request()->is($selected_source.'/'.$source_value['name'].'*')) ? 'active' : '' }}" href="{{ $source_value['path'] }}">
+                                    <a href="{{ $source_value['path'] }}" class="nav-link {{ (request()->is($selected_source.'/'.$source_value['name'].'*')) ? 'active' : '' }}" aria-current="{{ (request()->is($selected_source.'/'.$source_value['name'].'*')) ? 'page' : '' }}">
                                     @else
-                                    <a class="dropdown-item disabled" href="#">
+                                    <a href="#" class="nav-link disabled">
                                     @endif
-                                        {{-- {{ ucfirst($source_value['name']) }} --}}
-                                        {{ ucfirst(preg_replace('/(?<=[a-z])([A-Z])/', ' $1', $source_value['name'])) }}
+                                        {{ ucfirst($source_value['name']) }}
                                     </a>
                                 </li>
-                                @endforeach
-                            </ul>
-                        </li>
+                                @endif
+                            @endforeach
+                            @if (count($sourceJson[0]['paths']) >= 5)
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-list"></i>
+                                </a>
+                                <ul class="dropdown-menu" style="max-height: 300px; overflow-y: auto;">
+                                    @foreach ($sourceJson[0]['paths'] as $source_key => $source_value)
+                                    @if ($loop->iteration >= 5)
+                                        @if (isset($check_category[$source_value['name']]) && $check_category[$source_value['name']] > 0)
+                                        <li>
+                                            <a class="dropdown-item {{ (request()->is($selected_source.'/'.$source_value['name'].'*')) ? 'active' : '' }}" href="{{ $source_value['path'] }}">
+                                            @else
+                                            <a class="dropdown-item disabled" href="#">
+                                            @endif
+                                                {{-- {{ ucfirst($source_value['name']) }} --}}
+                                                {{ ucfirst(preg_replace('/(?<=[a-z])([A-Z])/', ' $1', $source_value['name'])) }}
+                                            </a>
+                                        </li>
+                                    @endif
+                                    @endforeach
+                                </ul>
+                            </li>
+                            @endif
                         @endif
                     @endif
                 </ul>

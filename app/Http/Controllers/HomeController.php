@@ -32,12 +32,22 @@ class HomeController extends Controller
             $explore = array_slice($exploreJson, 0, 5);
         }elseif($nav_response->failed()){
             if($nav_response->clientError()){
-
+                $error = '('.http_response_code().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
             }elseif($nav_response->serverError()){
-
+                $error = '('.http_response_code().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
             }
+            return view('pages.error', compact([
+                'navJson',
+                'explore',
+                'error',
+            ]));
         }else{
-
+            $error = '('.http_response_code().') Terdapat gagal koneksi yang tidak diketahui';
+            return view('pages.error', compact([
+                'navJson',
+                'explore',
+                'error',
+            ]));
         }
 
         // RETURN TO VIEW
@@ -62,8 +72,9 @@ class HomeController extends Controller
             // DECODING JSON FOR SOURCE AND NAVIGATION
             $sourceJson = $this->searchSource(json_decode($nav_response, true)['endpoints'], $source);
             $navJson = array_column($this->getSource(json_decode($nav_response, true)['endpoints']), 'name');
-
             // dd($sourceJson);
+
+            // GET ALL POSTS FOR CATEGORY CHECKER
             $all_posts = $this->getAllPosts($sourceJson, $source);
             // dd($all_posts);
 
@@ -141,12 +152,28 @@ class HomeController extends Controller
             }
         }elseif($nav_response->failed()){
             if($nav_response->clientError()){
-
+                $error = '('.http_response_code().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
             }elseif($nav_response->serverError()){
-
+                $error = '('.http_response_code().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
             }
+            return view('pages.error', compact([
+                'navJson',
+                'explore',
+                'sourceJson',
+                'selected_source',
+                'check_category',
+                'error',
+            ]));
         }else{
-
+            $error = '('.http_response_code().') Terdapat gagal koneksi yang tidak diketahui';
+            return view('pages.error', compact([
+                'navJson',
+                'explore',
+                'sourceJson',
+                'selected_source',
+                'check_category',
+                'error',
+            ]));
         }
 
         // RETURN TO VIEW
@@ -191,6 +218,7 @@ class HomeController extends Controller
             $sourceJson = $this->searchSource(json_decode($nav_response, true)['endpoints'], $source);
             $navJson = array_column($this->getSource(json_decode($nav_response, true)['endpoints']), 'name');
 
+            // GET ALL POSTS FOR CATEGORY CHECKER
             $all_posts = $this->getAllPosts($sourceJson, $source);
 
             // ADD ID FROM INDEX KEY TO ARRAY
@@ -242,12 +270,28 @@ class HomeController extends Controller
             }
         }elseif($response->failed()){
             if($response->clientError()){
-
+                $error = '('.http_response_code().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
             }elseif($response->serverError()){
-
+                $error = '('.http_response_code().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
             }
+            return view('pages.error', compact([
+                    'navJson',
+                    'explore',
+                    'sourceJson',
+                    'selected_source',
+                    'error',
+                    'check_category',
+                ]));
         }else{
-
+            $error = '('.http_response_code().') Terdapat gagal koneksi yang tidak diketahui';
+            return view('pages.error', compact([
+                'navJson',
+                'explore',
+                'sourceJson',
+                'selected_source',
+                'error',
+                'check_category',
+            ]));
         }
 
         // RETURN TO VIEW
@@ -293,6 +337,7 @@ class HomeController extends Controller
                 $jsonData = $responseArray['data']['posts'][$index];
             }
 
+            // GET ALL POSTS FOR CATEGORY CHECKER
             $all_posts = $this->getAllPosts($sourceJson, $source);
             // dd($all_posts);
 
@@ -327,12 +372,20 @@ class HomeController extends Controller
             }
         }elseif($response->failed()){
             if($response->clientError()){
-
+                $error = '('.http_response_code().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
             }elseif($response->serverError()){
-
+                $error = '('.http_response_code().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
             }
         }else{
-
+            $error = '('.http_response_code().') Terdapat gagal koneksi yang tidak diketahui';
+            return view('pages.error', compact([
+                'navJson',
+                'explore',
+                'sourceJson',
+                'selected_source',
+                'error',
+                'check_category',
+            ]));
         }
 
         // RETURN TO VIEW
