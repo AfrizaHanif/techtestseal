@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-bs-theme="auto">
     <head>
         <!--META IN EVERY TEMPLATES-->
         @include('templates.includes.meta.meta')

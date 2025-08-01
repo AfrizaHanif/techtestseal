@@ -3,7 +3,7 @@
             <div class="card h-100 border-0">
                 <img src="url({{ $recommends['thumbnail'] }})" class="card-img-top card-img-bottom" alt="...">
                 <div class="card-body">
-                    <a href="/{{ $selected_source }}/{{ $selected_category }}" class="stretched-link" style="text-decoration: none; color: black;">
+                    <a href="/{{ $selected_source }}/{{ $selected_category }}" class="stretched-link text-body-emphasis" style="text-decoration: none;">
                         <h5 class="card-title">{{ $recommends['title'] }}</h5>
                     </a>
                     <p class="card-text">

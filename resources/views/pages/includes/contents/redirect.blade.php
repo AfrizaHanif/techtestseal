@@ -21,18 +21,10 @@
 
 {{-- HEADLINES (CAROUSEL) --}}
 <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-indicators" data-bs-theme="dark">
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev" data-bs-theme="dark">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
+    <div class="carousel-indicators text-body-emphasis" style="filter: invert(1) grayscale(100);">
         @foreach ($headlines as $head_key => $head_value)
         <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="{{ $loop->index }}" class="{{ $loop->first ? 'active' : '' }}" aria-current="{{ $loop->first ? 'true' : '' }}" aria-label="Slide 1"></button>
         @endforeach
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next" data-bs-theme="dark">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
     </div>
     <div class="carousel-inner">
         @foreach ($headlines as $head_key => $head_value)
@@ -44,7 +36,7 @@
                     </div>
                     <div class="col-lg-6">
                         <p><b>Headline</b></p>
-                        <h1 class="display-6 fw-bold text-body-emphasis lh-1 mb-3">{{ $head_value['title'] }}</h1>
+                        <h1 class="display-6 fw-bold text-body-emphasis lh-1 mb-3">{{ html_entity_decode($head_value['title']) }}</h1>
                         <p class="lead">{{ html_entity_decode($head_value['description']) }}</p>
                         <p>
                             <i class="bi bi-calendar-event"></i>
@@ -62,6 +54,14 @@
         </div>
         @endforeach
     </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev" style="width: 5%;">
+        <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(1) grayscale(100);"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next" style="width: 5%;">
+        <span class="carousel-control-next-icon" aria-hidden="true" style="filter: invert(1) grayscale(100);"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
 </div>
 
 {{-- BERITA TERPOPULER (FEATURES WITH CARDS) --}}
@@ -78,7 +78,7 @@
                     <img src="{{ url($pop_value['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/nopic.png') }}'" class="d-block mx-lg-auto rounded img-fluid" loading="lazy">
                 </div>
                 <div class="col-7">
-                    <h3 class="fs-6 text-body-emphasis">{{ $pop_value['title'] }}</h3>
+                    <h3 class="fs-6 text-body-emphasis">{{ html_entity_decode($pop_value['title']) }}</h3>
                     <p>
                         {{ ucfirst($selected_category) }} | {{ \Carbon\Carbon::parse(env($pop_value['pubDate']))->locale('id')->translatedFormat('d F Y') }}
                     </p>
@@ -88,15 +88,15 @@
         <div class="card mb-3 border-0 position-relative {{ $loop->last ? '' : 'border-end' }} gx-5">
             <div class="row g-0">
                 <div class="col-md-4">
-                    <span class="position-absolute top-0 start-20 translate-middle badge rounded-pill bg-black">
+                    <span class="position-absolute top-0 start-20 translate-middle badge rounded-pill bg-primary text-white">
                         {{ $loop->index + 1 }}
                     </span>
                     <img src="{{ url($pop_value['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/nopic.png') }}'" class="img-fluid rounded pt-1" alt="...">
                 </div>
                 <div class="col-md-8">
                     <div class="card-body py-0">
-                        <a href="/{{ $selected_source }}/{{ $pop_value['category'] }}/{{ $pop_value['id'] }}" class="stretched-link" style="text-decoration: none; color: black;">
-                            <h6 class="card-title">{{ $pop_value['title'] }}</h6>
+                        <a href="/{{ $selected_source }}/{{ $pop_value['category'] }}/{{ $pop_value['id'] }}" class="stretched-link text-body-emphasis" style="text-decoration: none;">
+                            <h6 class="card-title">{{ html_entity_decode($pop_value['title']) }}</h6>
                         </a>
                         <p class="card-text">
                             {{-- {{ ucfirst($pop_value['category']) }} | {{ \Carbon\Carbon::parse(env($pop_value['pubDate']))->locale('id')->translatedFormat('d F Y') }} --}}
@@ -140,8 +140,8 @@
             <div class="card h-100 border-0">
                 <img src="{{ url($json_value['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/nopic.png') }}'" class="card-img-top card-img-bottom" alt="...">
                 <div class="card-body">
-                    <a href="/{{ $selected_source }}/{{ $json_value['category'] }}/{{ $json_value['id'] }}" class="stretched-link" style="text-decoration: none; color: black;">
-                        <h5 class="card-title">{{ $json_value['title'] }}</h5>
+                    <a href="/{{ $selected_source }}/{{ $json_value['category'] }}/{{ $json_value['id'] }}" class="stretched-link text-body-emphasis" style="text-decoration: none;">
+                        <h5 class="card-title">{{ html_entity_decode($json_value['title']) }}</h5>
                     </a>
                     <p class="card-text">
                         {{-- {{ ucfirst($json_value['category']) }} | {{ \Carbon\Carbon::parse(env($json_value['pubDate']))->locale('id')->translatedFormat('d F Y') }} --}}
@@ -159,8 +159,8 @@
                 <div class="card h-100 border-0">
                     <img src="{{ url($json_value['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/nopic.png') }}'" class="card-img-top card-img-bottom" alt="...">
                     <div class="card-body">
-                        <a href="/{{ $selected_source }}/{{ $json_value['category'] }}/{{ $json_value['id'] }}" class="stretched-link" style="text-decoration: none; color: black;">
-                            <h5 class="card-title">{{ $json_value['title'] }}</h5>
+                        <a href="/{{ $selected_source }}/{{ $json_value['category'] }}/{{ $json_value['id'] }}" class="stretched-link text-body-emphasis" style="text-decoration: none;">
+                            <h5 class="card-title">{{ html_entity_decode($json_value['title']) }}</h5>
                         </a>
                         <p class="card-text">
                             {{-- {{ ucfirst($json_value['category']) }} | {{ \Carbon\Carbon::parse(env($json_value['pubDate']))->locale('id')->translatedFormat('d F Y') }} --}}
