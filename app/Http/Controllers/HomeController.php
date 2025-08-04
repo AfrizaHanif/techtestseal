@@ -32,17 +32,20 @@ class HomeController extends Controller
             $random = array_slice($randomJson, 0, 1);
             $explore = array_slice($exploreJson, 0, 5);
         }elseif($nav_response->failed()){
-            if($nav_response->clientError()){
-                $error = '(Kode: '.$nav_response->status().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
-            }elseif($nav_response->serverError()){
-                $error = '(Kode: '.$nav_response->status().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
-            }
-            return view('pages.error', compact([
-                'error',
-            ]));
+            // if($nav_response->clientError()){
+            //     $error = '(Kode: '.$nav_response->status().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
+            // }elseif($nav_response->serverError()){
+            //     $error = '(Kode: '.$nav_response->status().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
+            // }
+            // return view('pages.error', compact([
+            //     'error',
+            // ]));
+            $this->errorCode($nav_response);
         }else{
-            $error = '(Kode: '.$nav_response->status().') Terdapat gagal koneksi yang tidak diketahui';
+            $title_error = '('.$nav_response->status().')';
+            $error = '(Kode: '.$nav_response->status().') Terdapat kesalahan yang tidak diketahui';
             return view('pages.error', compact([
+                'title_error',
                 'error',
             ]));
         }
@@ -148,17 +151,20 @@ class HomeController extends Controller
                 ]));
             }
         }elseif($nav_response->failed()){
-            if($nav_response->clientError()){
-                $error = '(Kode: '.$nav_response->status().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
-            }elseif($nav_response->serverError()){
-                $error = '(Kode: '.$nav_response->status().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
-            }
-            return view('pages.error', compact([
-                'error',
-            ]));
+            // if($nav_response->clientError()){
+            //     $error = '(Kode: '.$nav_response->status().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
+            // }elseif($nav_response->serverError()){
+            //     $error = '(Kode: '.$nav_response->status().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
+            // }
+            // return view('pages.error', compact([
+            //     'error',
+            // ]));
+            $this->errorCode($nav_response);
         }else{
-            $error = '(Kode: '.$nav_response->status().') Terdapat gagal koneksi yang tidak diketahui';
+            $title_error = '('.$nav_response->status().')';
+            $error = '(Kode: '.$nav_response->status().') Terdapat kesalahan yang tidak diketahui';
             return view('pages.error', compact([
+                'title_error',
                 'error',
             ]));
         }
@@ -256,17 +262,20 @@ class HomeController extends Controller
                 ]));
             }
         }elseif($response->failed()){
-            if($response->clientError()){
-                $error = '('.$response->status().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
-            }elseif($response->serverError()){
-                $error = '('.$response->status().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
-            }
-            return view('pages.error', compact([
-                    'error',
-                ]));
+            // if($response->clientError()){
+            //     $error = '('.$response->status().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
+            // }elseif($response->serverError()){
+            //     $error = '('.$response->status().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
+            // }
+            // return view('pages.error', compact([
+            //     'error',
+            // ]));
+            $this->errorCode($response);
         }else{
-            $error = '('.$response->status().') Terdapat gagal koneksi yang tidak diketahui';
+            $title_error = '('.$nav_response->status().')';
+            $error = '(Kode: '.$nav_response->status().') Terdapat kesalahan yang tidak diketahui';
             return view('pages.error', compact([
+                'title_error',
                 'error',
             ]));
         }
@@ -348,17 +357,20 @@ class HomeController extends Controller
                 ]));
             }
         }elseif($response->failed()){
-            if($response->clientError()){
-                $error = '('.$response->status().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
-            }elseif($response->serverError()){
-                $error = '('.$response->status().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
-            }
-            return view('pages.error', compact([
-                'error',
-            ]));
+            // if($response->clientError()){
+            //     $error = '('.$response->status().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
+            // }elseif($response->serverError()){
+            //     $error = '('.$response->status().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
+            // }
+            // return view('pages.error', compact([
+            //     'error',
+            // ]));
+            $this->errorCode($response);
         }else{
-            $error = '('.$response->status().') Terdapat gagal koneksi yang tidak diketahui';
+            $title_error = '('.$nav_response->status().')';
+            $error = '(Kode: '.$nav_response->status().') Terdapat kesalahan yang tidak diketahui';
             return view('pages.error', compact([
+                'title_error',
                 'error',
             ]));
         }
@@ -487,21 +499,84 @@ class HomeController extends Controller
                     $all_posts = array_merge($all_posts, $sourceJson['data']['posts']);
                 }
             }elseif($response->failed()){
-                if($response->clientError()){
-                    $error = '('.$response->status().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
-                }elseif($response->serverError()){
-                    $error = '('.$response->status().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
-                }
-                return view('pages.error', compact([
-                    'error',
-                ]));
+                // if($response->clientError()){
+                //     $error = '('.$response->status().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
+                // }elseif($response->serverError()){
+                //     $error = '('.$response->status().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
+                // }
+                // return view('pages.error', compact([
+                //     'error',
+                // ]));
+                $this->errorCode($response);
             }else{
-                $error = '('.$response->status().') Terdapat gagal koneksi yang tidak diketahui';
+                $title_error = '('.$response->status().')';
+                $error = '(Kode: '.$response->status().') Terdapat kesalahan yang tidak diketahui';
                 return view('pages.error', compact([
+                    'title_error',
                     'error',
                 ]));
             }
         }
         return $all_posts;
+    }
+
+    // TO GET ERROR MESSAGE
+    function errorCode($response){
+        // 4xx CLIENT ERROR
+        if($response->clientError()){
+            if($response->status() == 400){
+                $title_error = '('.$response->status().') Bad Request';
+                $error = 'Terdapat masalah di sisi client yang dapat membatalkan validasi permintaan untuk diproses';
+            }elseif($response->status() == 401){
+                $title_error = '('.$response->status().') Unauthorized';
+                $error = 'Terdapat permintaan yang tidak dapat diproses ole server karena client tidak memiliki kredensial autentikasi yang valid';
+            }elseif($response->status() == 403){
+                $title_error = '('.$response->status().') Forbidden';
+                $error = 'Terdapat izin yang ditolak kepada client untuk mengakses API';
+            }elseif($response->status() == 404){
+                $title_error = '('.$response->status().') Not Found';
+                $error = 'Terdapat API yang tidak ditemukan';
+            }elseif($response->status() == 408){
+                $title_error = '('.$response->status().') Request Timeout';
+                $error = 'Waktu loading API telah habis';
+            }elseif($response->status() == 424){
+                $title_error = '('.$response->status().') Failed Dependency';
+                $error = 'Terdapat permintaan gagal diproses karena ketergantungannya pada permintaan lain yang juga gagal';
+            }elseif($response->status() == 429){
+                $title_error = '('.$response->status().') Too Many Requests';
+                $error = 'Client telah mengirim terlalu banyak permintaan dalam jangka waktu tertentu';
+            }else{
+                $title_error = '('.$response->status().')';
+                $error = 'Terdapat kesalahan yang ada pada sisi client';
+            }
+        }
+        // 5XX SERVER ERROR
+        elseif($response->serverError()){
+            if($response->status() == 500){
+                $title_error = '('.$response->status().') Internal Server Error';
+                $error = 'Server tidak bisa memenuhi permintaan karena kondisi yang tidak terduga';
+            }elseif($response->status() == 502){
+                $title_error = '('.$response->status().') Bad Gateway';
+                $error = 'Server tidak bisa memenuhi permintaan klien karena telah menerima respons yang tidak valid dari server upstream';
+            }elseif($response->status() == 503){
+                $title_error = '('.$response->status().') Service Unavailable';
+                $error = 'Server tidak bisa menangani permintaan karena kehabisan resource atau sedang dalam maintenance';
+            }elseif($response->status() == 504){
+                $title_error = '('.$response->status().') Gateway Timeout';
+                $error = 'Server proxy belum menerima respons tepat waktu yang diperlukan untuk memenuhi permintaan dari server upstream';
+            }else{
+                $title_error = '('.$response->status().')';
+                $error = 'Terdapat kesalahan yang ada pada sisi server';
+            }
+        }
+        // UNKNOWN ERROR
+        else{
+            $title_error = '('.$response->status().')';
+            $error = '(Kode: '.$response->status().') Terdapat kesalahan yang tidak diketahui';
+        }
+        return view('pages.error', compact([
+            'title_error',
+            'error',
+        ]));
     }
 }
