@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -32,15 +33,15 @@ class HomeController extends Controller
             $explore = array_slice($exploreJson, 0, 5);
         }elseif($nav_response->failed()){
             if($nav_response->clientError()){
-                $error = '('.http_response_code().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
+                $error = '(Kode: '.$nav_response->status().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
             }elseif($nav_response->serverError()){
-                $error = '('.http_response_code().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
+                $error = '(Kode: '.$nav_response->status().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
             }
             return view('pages.error', compact([
                 'error',
             ]));
         }else{
-            $error = '('.http_response_code().') Terdapat gagal koneksi yang tidak diketahui';
+            $error = '(Kode: '.$nav_response->status().') Terdapat gagal koneksi yang tidak diketahui';
             return view('pages.error', compact([
                 'error',
             ]));
@@ -148,15 +149,15 @@ class HomeController extends Controller
             }
         }elseif($nav_response->failed()){
             if($nav_response->clientError()){
-                $error = '('.http_response_code().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
+                $error = '(Kode: '.$nav_response->status().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
             }elseif($nav_response->serverError()){
-                $error = '('.http_response_code().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
+                $error = '(Kode: '.$nav_response->status().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
             }
             return view('pages.error', compact([
                 'error',
             ]));
         }else{
-            $error = '('.http_response_code().') Terdapat gagal koneksi yang tidak diketahui';
+            $error = '(Kode: '.$nav_response->status().') Terdapat gagal koneksi yang tidak diketahui';
             return view('pages.error', compact([
                 'error',
             ]));
@@ -256,15 +257,15 @@ class HomeController extends Controller
             }
         }elseif($response->failed()){
             if($response->clientError()){
-                $error = '('.http_response_code().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
+                $error = '('.$response->status().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
             }elseif($response->serverError()){
-                $error = '('.http_response_code().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
+                $error = '('.$response->status().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
             }
             return view('pages.error', compact([
                     'error',
                 ]));
         }else{
-            $error = '('.http_response_code().') Terdapat gagal koneksi yang tidak diketahui';
+            $error = '('.$response->status().') Terdapat gagal koneksi yang tidak diketahui';
             return view('pages.error', compact([
                 'error',
             ]));
@@ -348,15 +349,15 @@ class HomeController extends Controller
             }
         }elseif($response->failed()){
             if($response->clientError()){
-                $error = '('.http_response_code().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
+                $error = '('.$response->status().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
             }elseif($response->serverError()){
-                $error = '('.http_response_code().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
+                $error = '('.$response->status().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
             }
             return view('pages.error', compact([
                 'error',
             ]));
         }else{
-            $error = '('.http_response_code().') Terdapat gagal koneksi yang tidak diketahui';
+            $error = '('.$response->status().') Terdapat gagal koneksi yang tidak diketahui';
             return view('pages.error', compact([
                 'error',
             ]));
@@ -487,15 +488,15 @@ class HomeController extends Controller
                 }
             }elseif($response->failed()){
                 if($response->clientError()){
-                    $error = '('.http_response_code().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
+                    $error = '('.$response->status().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
                 }elseif($response->serverError()){
-                    $error = '('.http_response_code().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
+                    $error = '('.$response->status().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
                 }
                 return view('pages.error', compact([
                     'error',
                 ]));
             }else{
-                $error = '('.http_response_code().') Terdapat gagal koneksi yang tidak diketahui';
+                $error = '('.$response->status().') Terdapat gagal koneksi yang tidak diketahui';
                 return view('pages.error', compact([
                     'error',
                 ]));
