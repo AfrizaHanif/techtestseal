@@ -5,8 +5,10 @@
     <div id="scroll_header" class="fixed-top bg-body text-body">
     @endif
         @if ($i == 1)
+        {{-- SOURCE HEADER --}}
         <nav class="py-2 bg-body-secondary border-bottom">
             <div class="container d-flex flex-wrap">
+                {{-- SOURCE NAVIGATION (GLOBAL) --}}
                 <ul class="nav me-auto">
                     @if ($navJson = $navJson ?? [])
                     @foreach ($navJson as $nav_key => $nav_value)
@@ -22,6 +24,7 @@
                     @endforeach
                     @endif
                 </ul>
+                {{-- COLOR MODE TOGGLE --}}
                 <ul class="nav">
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" id="themeDropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -49,12 +52,15 @@
             </div>
         </nav>
         @endif
+        {{-- CATEGORY HEADER --}}
         <div class="container">
             <header class="d-flex flex-wrap justify-content-center py-3 border-bottom">
+                {{-- SITE NAME AND LOGO --}}
                 <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none show-preloader">
                     <svg class="bi me-2" width="40" height="40" aria-hidden="true"><use xlink:href="#newspaper"></use></svg>
                     <span class="fs-4">Berita Kini</span>
                 </a>
+                {{-- CATEGORY NAVIGATION --}}
                 <ul class="nav nav-pills">
                     @if (Request::is('/'))
                     {{-- <li class="nav-item">
@@ -76,12 +82,13 @@
                     </li> --}}
                     @else
                         @if ($sourceJson = $sourceJson ?? [] && $selected_source = $selected_source ?? [])
+                        {{-- SOURCE'S MAIN PAGE LINK --}}
                         <li class="nav-item">
                             <a href="/{{ $selected_source }}" class="nav-link show-preloader {{ (request()->is($selected_source.'')) ? 'active' : '' }}" aria-current="page">
                                 Beranda
                             </a>
                         </li>
-                            {{-- NEW VERSION (BETA) --}}
+                            {{-- SOURCE'S CATEGORIES LINK --}}
                             @foreach ($sourceJson[0]['paths'] as $source_key => $source_value)
                                 @if ($loop->iteration < 5)
                                 <li class="nav-item">

@@ -17,38 +17,27 @@ class HomeController extends Controller
 
     public function index(Request $request){
         // CONSUME EXTERNAL API
-        $nav_response = Http::get('https://api-berita-indonesia.vercel.app/');
+        $response = Http::get('https://api-berita-indonesia.vercel.app/');
 
         // CHECK API RESPONSE
-        if($nav_response->successful()){
+        if($response->successful()){
             // DECODING JSON WITH SETTING UP COLUMN AND SHUFFLE (RANDOM AND EXPLORE)
-            $navJson = array_column($this->getSource(json_decode($nav_response, true)['endpoints']), 'name');
-            $randomJson = $navJson;
+            $endpoint = array_column($this->getSource(json_decode($response, true)['endpoints']), 'name');
+            $randomJson = $endpoint;
             shuffle($randomJson);
-            $exploreJson = $navJson;
-            shuffle($exploreJson);
 
             // SLICING THE ARRAY TO SPECIFIC LIMIT
-            $random = array_slice($randomJson, 0, 1);
-            $explore = array_slice($exploreJson, 0, 5);
-        }elseif($nav_response->failed()){
-            // if($nav_response->clientError()){
-            //     $error = '(Kode: '.$nav_response->status().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
-            // }elseif($nav_response->serverError()){
-            //     $error = '(Kode: '.$nav_response->status().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
-            // }
-            // return view('pages.error', compact([
-            //     'error',
-            // ]));
-            $title_error = $this->errorCode($nav_response)['title_error'];
-            $error = $this->errorCode($nav_response)['error'];
+            $random = array_slice($randomJson, 0, 1); // COMPACT
+        }elseif($response->failed()){
+            $title_error = $this->errorCode($response)['title_error']; // COMPACT
+            $error = $this->errorCode($response)['error']; // COMPACT
             return view('pages.error', compact([
                 'title_error',
                 'error',
             ]));
         }else{
-            $title_error = '('.$nav_response->status().')';
-            $error = '(Kode: '.$nav_response->status().') Terdapat kesalahan yang tidak diketahui';
+            $title_error = '('.$response->status().')'; // COMPACT
+            $error = '(Kode: '.$response->status().') Terdapat kesalahan yang tidak diketahui'; // COMPACT
             return view('pages.error', compact([
                 'title_error',
                 'error',
@@ -57,73 +46,35 @@ class HomeController extends Controller
 
         // RETURN TO VIEW
         return view('pages.index', compact([
-            'navJson',
             'random',
-            'explore',
         ]));
     }
 
     public function redirect(Request $request, $source){
         // GET DATA
-        $search = $request->input('search');
-        // $all_posts = [];
-        $selected_source = $source;
+        $search = $request->input('search'); // COMPACT
+        $selected_source = $source; // COMPACT
 
         // CONSUME EXTERNAL API FOR NAVIGATION
-        $nav_response = Http::get('https://api-berita-indonesia.vercel.app/');
+        $response = Http::get('https://api-berita-indonesia.vercel.app/');
 
         // CHECK API RESPONSE
-        if($nav_response->successful()){
-            // DECODING JSON FOR SOURCE AND NAVIGATION
-            $sourceJson = $this->searchSource(json_decode($nav_response, true)['endpoints'], $source);
-            $navJson = array_column($this->getSource(json_decode($nav_response, true)['endpoints']), 'name');
-            // dd($sourceJson);
+        if($response->successful()){
+            // DECODING JSON FOR NAVIGATION
+            $sourceJson = $this->searchSource(json_decode($response, true)['endpoints'], $source); // COMPACT
 
             // GET ALL POSTS FOR CATEGORY CHECKER
             $all_posts = $this->getAllPosts($sourceJson, $source);
 
             // CHECK IF NULL RESULT
             if(count($all_posts) == 0){
-                $title_error = 'Unexpected Error';
-                $error = 'Terdapat kesalahan yang ada saat mengambil artikel';
+                $title_error = 'Unexpected Error'; // COMPACT
+                $error = 'Terdapat kesalahan yang ada saat mengambil artikel'; // COMPACT
                 return view('pages.error', compact([
                     'title_error',
                     'error',
                 ]));
             }
-
-            // dd($all_posts);
-
-            // dd(array_count_values(array_column($all_posts, 'category'))['terbaru']);
-
-            // LOOPING FOR GET ALL POSTS (MOVE TO EXTERNAL FUNCTION (getAllPosts))
-            // foreach($sourceJson[0]['paths'] as $source_key => $source_value){
-            //     // CONSUME EXTERNAL API FOR POSTS IN SPECIFIC SOURCE AND EVERY CATEGORIES
-            //     $response = json_decode(Http::get('https://api-berita-indonesia.vercel.app/'.$source.'/'.$source_value['name']), true);
-            //     // dd(count($response['data']['posts']));
-
-            //     // CHECK IF NO DATA IN CATEGORY
-            //     if ($response !== null && isset($response['data']['posts'])) {
-            //         // ADD CATEGORY AND ID TO ARRAY
-            //         foreach($response['data']['posts'] as $res_key => $res_value){
-            //             $response['data']['posts'][$res_key]['category'] = $source_value['name'];
-            //             $response['data']['posts'][$res_key]['id'] = $res_key;
-            //         }
-
-            //         // MERGE ARRAY DURING LOOPING
-            //         $all_posts = array_merge($all_posts, $response['data']['posts']);
-            //     }
-            //     // dd($all_posts);
-
-            //     // array_push($all_posts, ['category' => $source_value['name']]);
-            //     // $all_posts[] = $source_value['name'];
-
-            //     // $response['data']['posts']['category'] = $source_value['name'];
-            //     // $all_posts = array_merge($all_posts, $response['data']['posts']);
-            // }
-
-            // dd($all_posts);
-            // $column = array_column(array_column($all_posts, 'data'), 'posts');
 
             // IF SEARCH AVAILABLE
             if($search){
@@ -131,10 +82,10 @@ class HomeController extends Controller
                 $searchJson = $this->searchJson($all_posts, $search);
 
                 // LAUNCH FUNCTION TO PAGINATE ALL POSTS
-                $recommends = $this->paginate($searchJson);
+                $recommends = $this->paginate($searchJson); // COMPACT
             }else{
                 // LAUNCH FUNCTION TO PAGINATE ALL POSTS
-                $recommends = $this->paginate($all_posts);
+                $recommends = $this->paginate($all_posts); // COMPACT
             }
 
             // SHUFFLE THE ARRAY FOR PICKING A RANDOM ITEMS
@@ -142,48 +93,35 @@ class HomeController extends Controller
             shuffle($headlineJson);
             $popularJson = $all_posts;
             shuffle($popularJson);
-            $exploreJson = array_column($sourceJson[0]['paths'], 'name');
-            shuffle($exploreJson);
 
             // SLICING THE ARRAY TO SPECIFIC LIMIT
-            $headlines = array_slice($headlineJson, 0, 5);
-            $populars = array_slice($popularJson, 0, 3);
-            $explore = array_slice($exploreJson, 0, 5);
+            $headlines = array_slice($headlineJson, 0, 5); // COMPACT
+            $populars = array_slice($popularJson, 0, 3); // COMPACT
 
             // CHECK AMOUNT OF POST IN EVERY CATEGORIES
-            $check_category = array_count_values(array_column($all_posts, 'category'));
+            $check_category = array_count_values(array_column($all_posts, 'category')); // COMPACT
 
             // VERIFY IF POSTS NOT AVAILABLE (NULL)
             if(count($all_posts) == 0){
-                $error = 'Tidak ada postingan dari sumber tersebut. Mohon untuk mengunjungi sumber ini beberapa saat lagi';
+                $error = 'Tidak ada postingan dari sumber tersebut. Mohon untuk mengunjungi sumber ini beberapa saat lagi'; // COMPACT
 
                 return view('pages.empty', compact([
-                    'navJson',
-                    'explore',
                     'sourceJson',
                     'selected_source',
                     'check_category',
                     'error',
                 ]));
             }
-        }elseif($nav_response->failed()){
-            // if($nav_response->clientError()){
-            //     $error = '(Kode: '.$nav_response->status().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
-            // }elseif($nav_response->serverError()){
-            //     $error = '(Kode: '.$nav_response->status().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
-            // }
-            // return view('pages.error', compact([
-            //     'error',
-            // ]));
-            $title_error = $this->errorCode($nav_response)['title_error'];
-            $error = $this->errorCode($nav_response)['error'];
+        }elseif($response->failed()){
+            $title_error = $this->errorCode($response)['title_error']; // COMPACT
+            $error = $this->errorCode($response)['error']; // COMPACT
             return view('pages.error', compact([
                 'title_error',
                 'error',
             ]));
         }else{
-            $title_error = '('.$nav_response->status().')';
-            $error = '(Kode: '.$nav_response->status().') Terdapat kesalahan yang tidak diketahui';
+            $title_error = '('.$response->status().')'; // COMPACT
+            $error = '(Kode: '.$response->status().') Terdapat kesalahan yang tidak diketahui'; // COMPACT
             return view('pages.error', compact([
                 'title_error',
                 'error',
@@ -193,24 +131,20 @@ class HomeController extends Controller
         // RETURN TO VIEW
         return view('pages.redirect', compact([
             'search',
-            'sourceJson',
             'selected_source',
-            'navJson',
-            'exploreJson',
-            'all_posts',
+            'sourceJson',
             'recommends',
             'headlines',
             'populars',
-            'explore',
             'check_category',
         ]));
     }
 
     public function source(Request $request, $source, $category){
         // GET DATA
-        $search = $request->input('search');
-        $selected_source = $source;
-        $selected_category = $category;
+        $search = $request->input('search'); // COMPACT
+        $selected_source = $source; // COMPACT
+        $selected_category = $category; // COMPACT
 
         // CONSUME EXTERNAL API
         $response = Http::get('https://api-berita-indonesia.vercel.app/'.$source.'/'.$category);
@@ -229,16 +163,15 @@ class HomeController extends Controller
                 $jsonData = $responseArray['data']['posts'];
             }
 
-            $sourceJson = $this->searchSource(json_decode($nav_response, true)['endpoints'], $source);
-            $navJson = array_column($this->getSource(json_decode($nav_response, true)['endpoints']), 'name');
+            $sourceJson = $this->searchSource(json_decode($nav_response, true)['endpoints'], $source); // COMPACT
 
             // GET ALL POSTS FOR CATEGORY CHECKER
             $all_posts = $this->getAllPosts($sourceJson, $source);
 
             // CHECK IF NULL RESULT
             if(count($all_posts) == 0){
-                $title_error = 'Unexpected Error';
-                $error = 'Terdapat kesalahan yang ada saat mengambil artikel';
+                $title_error = 'Unexpected Error'; // COMPACT
+                $error = 'Terdapat kesalahan yang ada saat mengambil artikel'; // COMPACT
                 return view('pages.error', compact([
                     'title_error',
                     'error',
@@ -249,7 +182,6 @@ class HomeController extends Controller
             foreach($jsonData as $res_key => $res_value){
                 $jsonData[$res_key]['id'] = $res_key;
             }
-            // dd($jsonData);
 
             // IF SEARCH AVAILABLE
             if($search){
@@ -257,10 +189,10 @@ class HomeController extends Controller
                 $searchJson = $this->searchJson($jsonData, $search);
 
                 // LAUNCH FUNCTION TO PAGINATE ALL POSTS
-                $recommends = $this->paginate($searchJson);
+                $recommends = $this->paginate($searchJson); // COMPACT
             }else{
                 // LAUNCH FUNCTION TO PAGINATE ALL POSTS
-                $recommends = $this->paginate($jsonData);
+                $recommends = $this->paginate($jsonData); // COMPACT
             }
 
             // SHUFFLE THE ARRAY FOR PICKING A RANDOM ITEMS
@@ -268,24 +200,19 @@ class HomeController extends Controller
             shuffle($headlineJson);
             $popularJson = $jsonData;
             shuffle($popularJson);
-            $exploreJson = array_column($sourceJson[0]['paths'], 'name');
-            shuffle($exploreJson);
 
             // SLICING THE ARRAY
-            $headlines = array_slice($headlineJson, 0, 5);
-            $populars = array_slice($popularJson, 0, 3);
-            $explore = array_slice($exploreJson, 0, 5);
+            $headlines = array_slice($headlineJson, 0, 5); // COMPACT
+            $populars = array_slice($popularJson, 0, 3); // COMPACT
 
             // CHECK AMOUNT OF POST IN EVERY CATEGORIES
             $check_category = array_count_values(array_column($all_posts, 'category'));
 
             // VERIFY IF POSTS NOT AVAILABLE (NULL)
             if(count($jsonData) == 0){
-                $error = 'Tidak ada postingan dari kategori di sumber tersebut. Mohon untuk mengunjungi kategori ini beberapa saat lagi';
+                $error = 'Tidak ada postingan dari kategori di sumber tersebut. Mohon untuk mengunjungi kategori ini beberapa saat lagi'; // COMPACT
 
                 return view('pages.empty', compact([
-                    'navJson',
-                    'explore',
                     'sourceJson',
                     'selected_source',
                     'error',
@@ -293,23 +220,15 @@ class HomeController extends Controller
                 ]));
             }
         }elseif($response->failed()){
-            // if($response->clientError()){
-            //     $error = '('.$response->status().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
-            // }elseif($response->serverError()){
-            //     $error = '('.$response->status().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
-            // }
-            // return view('pages.error', compact([
-            //     'error',
-            // ]));
-            $title_error = $this->errorCode($response)['title_error'];
-            $error = $this->errorCode($response)['error'];
+            $title_error = $this->errorCode($response)['title_error']; // COMPACT
+            $error = $this->errorCode($response)['error']; // COMPACT
             return view('pages.error', compact([
                 'title_error',
                 'error',
             ]));
         }else{
-            $title_error = '('.$nav_response->status().')';
-            $error = '(Kode: '.$nav_response->status().') Terdapat kesalahan yang tidak diketahui';
+            $title_error = '('.$response->status().')'; // COMPACT
+            $error = '(Kode: '.$response->status().') Terdapat kesalahan yang tidak diketahui'; // COMPACT
             return view('pages.error', compact([
                 'title_error',
                 'error',
@@ -322,19 +241,17 @@ class HomeController extends Controller
             'selected_source',
             'selected_category',
             'sourceJson',
-            'navJson',
             'recommends',
             'headlines',
             'populars',
-            'explore',
             'check_category',
         ]));
     }
 
     public function post(Request $request, $source, $category, $index){
         // GET DATA
-        $selected_source = $source;
-        $selected_category = $category;
+        $selected_source = $source; // COMPACT
+        $selected_category = $category; // COMPACT
         $selected_index = $index;
 
         // CONSUME EXTERNAL API
@@ -344,19 +261,16 @@ class HomeController extends Controller
         // CHECK API RESPONSE
         if($response->successful()){
             // DECODING JSON WITH LAUNCH A FUNCTION (SEARCH AND NAVIGATION)
-            $sourceJson = $this->searchSource(json_decode($nav_response, true)['endpoints'], $source);
-            $navJson = array_column($this->getSource(json_decode($nav_response, true)['endpoints']), 'name');
-            // $jsonData = json_decode($response, true)['data']['posts'][$index];
+            $sourceJson = $this->searchSource(json_decode($nav_response, true)['endpoints'], $source); // COMPACT
             $responseArray = json_decode($response, true);
             $jsonData = null;
-            // $jsonData1 = json_decode($response, true)['data']['posts'];
 
             if(
                 is_array($responseArray) &&
                 isset($responseArray['data']['posts']) &&
                 isset($responseArray['data']['posts'][$index])
             ){
-                $jsonData = $responseArray['data']['posts'][$index];
+                $jsonData = $responseArray['data']['posts'][$index]; // COMPACT
             }
 
             // GET ALL POSTS FOR CATEGORY CHECKER
@@ -364,8 +278,8 @@ class HomeController extends Controller
 
             // CHECK IF NULL RESULT
             if(count($all_posts) == 0){
-                $title_error = 'Unexpected Error';
-                $error = 'Terdapat kesalahan yang ada saat mengambil artikel';
+                $title_error = 'Unexpected Error'; // COMPACT
+                $error = 'Terdapat kesalahan yang ada saat mengambil artikel'; // COMPACT
                 return view('pages.error', compact([
                     'title_error',
                     'error',
@@ -377,24 +291,19 @@ class HomeController extends Controller
             shuffle($popularJson);
             $relatedJson = $all_posts;
             shuffle($relatedJson);
-            $exploreJson = array_column($sourceJson[0]['paths'], 'name');
-            shuffle($exploreJson);
 
             // SLICING THE ARRAY
-            $populars = array_slice($popularJson, 0, 3);
-            $related = array_slice($relatedJson, 0, 3);
-            $explore = array_slice($exploreJson, 0, 5);
+            $populars = array_slice($popularJson, 0, 3); // COMPACT
+            $related = array_slice($relatedJson, 0, 3); // COMPACT
 
             // CHECK AMOUNT OF POST IN EVERY CATEGORIES
-            $check_category = array_count_values(array_column($all_posts, 'category'));
+            $check_category = array_count_values(array_column($all_posts, 'category')); // COMPACT
 
             // VERIFY IF POST NOT AVAILABLE (NULL)
             if(!$jsonData){
-                $error = 'Tidak ada postingan yang terdaftar';
+                $error = 'Tidak ada postingan yang terdaftar'; // COMPACT
 
                 return view('pages.empty', compact([
-                    'navJson',
-                    'explore',
                     'sourceJson',
                     'selected_source',
                     'error',
@@ -402,23 +311,15 @@ class HomeController extends Controller
                 ]));
             }
         }elseif($response->failed()){
-            // if($response->clientError()){
-            //     $error = '('.$response->status().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
-            // }elseif($response->serverError()){
-            //     $error = '('.$response->status().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
-            // }
-            // return view('pages.error', compact([
-            //     'error',
-            // ]));
-            $title_error = $this->errorCode($response)['title_error'];
-            $error = $this->errorCode($response)['error'];
+            $title_error = $this->errorCode($response)['title_error']; // COMPACT
+            $error = $this->errorCode($response)['error']; // COMPACT
             return view('pages.error', compact([
                 'title_error',
                 'error',
             ]));
         }else{
-            $title_error = '('.$nav_response->status().')';
-            $error = '(Kode: '.$nav_response->status().') Terdapat kesalahan yang tidak diketahui';
+            $title_error = '('.$nav_response->status().')'; // COMPACT
+            $error = '(Kode: '.$nav_response->status().') Terdapat kesalahan yang tidak diketahui'; // COMPACT
             return view('pages.error', compact([
                 'title_error',
                 'error',
@@ -431,11 +332,9 @@ class HomeController extends Controller
             'selected_category',
             'selected_index',
             'sourceJson',
-            'navJson',
             'jsonData',
             'populars',
             'related',
-            'explore',
             'check_category',
         ]));
     }
@@ -548,16 +447,6 @@ class HomeController extends Controller
                     // MERGE ARRAY DURING LOOPING
                     $all_posts = array_merge($all_posts, $sourceJson['data']['posts']);
                 }
-            }elseif($response->failed()){
-                // if($response->clientError()){
-                //     $error = '('.$response->status().') Terdapat gagal koneksi dari browser / komputer anda. Mohon untuk melakukan cek setting koneksi pada komputer anda';
-                // }elseif($response->serverError()){
-                //     $error = '('.$response->status().') Terdapat gagal koneksi dari server ini. Kami akan memperbaiki kesalahan yang ada pada situs ini';
-                // }
-                // return view('pages.error', compact([
-                //     'error',
-                // ]));
-                return null;
             }else{
                 return null;
             }
@@ -619,10 +508,7 @@ class HomeController extends Controller
             $title_error = '('.$response->status().')';
             $error = '(Kode: '.$response->status().') Terdapat kesalahan yang tidak diketahui';
         }
-        // return view('pages.error', compact([
-        //     'title_error',
-        //     'error',
-        // ]));
+
         return ['title_error' => $title_error, 'error' => $error];
     }
 }

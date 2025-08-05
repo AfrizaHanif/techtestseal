@@ -1,5 +1,6 @@
 <div class="container mt-auto">
     <footer class="d-flex flex-wrap row row-cols-1 row-cols-sm-2 row-cols-md-4 py-5 my-3 border-top">
+        {{-- ABOUT SECTION --}}
         <div class="col mb-3">
             <a href="/" class="d-flex align-items-center mb-3 link-body-emphasis text-decoration-none" aria-label="Bootstrap">
                 <svg class="bi me-2" width="40" height="40" aria-hidden="true"><use xlink:href="#newspaper"></use></svg>
@@ -21,12 +22,13 @@
                 </li>
             </ul>
         </div>
+        {{-- EXPLORE SECTION --}}
         <div class="col mb-3">
             @if (Request::is('/'))
             <h6>Telusuri Sumber</h6>
-                @if ($explore = $explore ?? [])
+                @if ($exploreSource = $exploreSource ?? [])
                 <ul class="nav flex-column">
-                    @foreach ($explore as $exp_key => $exp_Value)
+                    @foreach ($exploreSource as $exp_key => $exp_Value)
                     <li class="nav-item mb-2">
                         <a href="/{{ $exp_Value }}" class="nav-link p-0 text-body-secondary">
                             @if (strlen(ucfirst($exp_Value)) > 4)
@@ -41,15 +43,16 @@
                 @endif
             @else
             <h6>Telusuri Kategori</h6>
-                @if ($explore = $explore ?? [])
+                @if ($exploreCategory = $exploreCategory ?? [])
                 <ul class="nav flex-column">
-                    @foreach ($explore as $exp_key => $exp_Value)
+                    @foreach ($exploreCategory as $exp_key => $exp_Value)
                     <li class="nav-item mb-2"><a href="/{{ $selected_source }}/{{ $exp_Value }}" class="nav-link p-0 text-body-secondary">{{ ucfirst($exp_Value) }}</a></li>
                     @endforeach
                 </ul>
                 @endif
             @endif
         </div>
+        {{-- PAGE SECTION --}}
         <div class="col mb-3">
             <h6>Bantuan</h6>
             <ul class="nav flex-column">
@@ -58,6 +61,7 @@
                 <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Kebijakan</a></li>
             </ul>
         </div>
+        {{-- SUBSCRIBE SECTION --}}
         <div class="col mb-3">
             <h6>Berlanggan Berita Baru</h6>
             <div class="input-group mb-3">

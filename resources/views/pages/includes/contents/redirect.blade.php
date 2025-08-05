@@ -1,31 +1,15 @@
 {{-- NAVIGATON (BREADCRUMBS) --}}
-<div class="container pt-3 my-3">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb breadcrumb-chevron p-3 bg-body-tertiary rounded-3">
-            <li class="breadcrumb-item">
-                <a class="link-body-emphasis show-preloader" href="/">
-                    <svg class="bi" width="16" height="16" aria-hidden="true"><use xlink:href="#house-door-fill"></use></svg>
-                    <span class="visually-hidden">Beranda</span>
-                </a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">
-                @if (strlen(ucfirst($selected_source)) > 4)
-                {{ ucfirst($selected_source) }}
-                @else
-                {{ strtoupper($selected_source) }}
-                @endif
-            </li>
-        </ol>
-    </nav>
-</div>
+@include('pages.includes.components.breadcrumb')
 
 {{-- HEADLINES (CAROUSEL) --}}
 <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+    {{-- CAROUSEL INDICATOR --}}
     <div class="carousel-indicators text-body-emphasis" style="filter: invert(1) grayscale(100);">
         @foreach ($headlines as $head_key => $head_value)
         <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="{{ $loop->index }}" class="{{ $loop->first ? 'active' : '' }}" aria-current="{{ $loop->first ? 'true' : '' }}" aria-label="Slide 1"></button>
         @endforeach
     </div>
+    {{-- CAROUSEL CONTENT --}}
     <div class="carousel-inner">
         @foreach ($headlines as $head_key => $head_value)
         <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
@@ -54,6 +38,7 @@
         </div>
         @endforeach
     </div>
+    {{-- CAROUSEL CONTROL --}}
     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev" style="width: 5%;">
         <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(1) grayscale(100);"></span>
         <span class="visually-hidden">Previous</span>
@@ -64,27 +49,11 @@
     </button>
 </div>
 
-{{-- BERITA TERPOPULER (FEATURES WITH CARDS) --}}
+{{-- MOST POPULAR NEWS (FEATURES WITH CARDS) --}}
 <div class="container px-4 pt-5" id="hanging-icons">
     <h2 class="pb-2 border-bottom">Berita Terpopuler</h2>
     <div class="row g-4 pt-3 pb-5 row-cols-1 row-cols-lg-3">
         @foreach ($populars as $pop_key => $pop_value)
-        {{-- <div class="col position-relative">
-            <div class="row">
-                <div class="col-5">
-                    <span class="position-absolute top-0 start-20 translate-middle badge rounded-pill bg-black">
-                        {{ $loop->index + 1 }}
-                    </span>
-                    <img src="{{ url($pop_value['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/nopic.png') }}'" class="d-block mx-lg-auto rounded img-fluid" loading="lazy">
-                </div>
-                <div class="col-7">
-                    <h3 class="fs-6 text-body-emphasis">{{ html_entity_decode($pop_value['title']) }}</h3>
-                    <p>
-                        {{ ucfirst($selected_category) }} | {{ \Carbon\Carbon::parse(env($pop_value['pubDate']))->locale('id')->translatedFormat('d F Y') }}
-                    </p>
-                </div>
-            </div>
-        </div> --}}
         <div class="card mb-3 border-0 position-relative {{ $loop->last ? '' : 'border-end' }} gx-5">
             <div class="row g-0">
                 <div class="col-md-4">
@@ -99,7 +68,6 @@
                             <h6 class="card-title">{{ html_entity_decode($pop_value['title']) }}</h6>
                         </a>
                         <p class="card-text">
-                            {{-- {{ ucfirst($pop_value['category']) }} | {{ \Carbon\Carbon::parse(env($pop_value['pubDate']))->locale('id')->translatedFormat('d F Y') }} --}}
                             {{ ucfirst(preg_replace('/(?<=[a-z])([A-Z])/', ' $1', $pop_value['category'])) }} | {{ \Carbon\Carbon::parse(env($pop_value['pubDate']))->locale('id')->translatedFormat('d F Y') }}
                         </p>
                     </div>
@@ -110,7 +78,7 @@
     </div>
 </div>
 
-{{-- REKOMENDASI UNTUK ANDA (CARDS) --}}
+{{-- RECOMMENDED NEWS (ALL POST) (CARDS) --}}
 <div class="container px-4 py-3">
     <div class="row align-items-start border-bottom">
         <div class="col-8">
@@ -127,12 +95,13 @@
             </form>
         </div>
     </div>
-    {{-- <div class="row row-cols-1 row-cols-md-4 g-4 pt-3"> --}}
+    {{-- IF SEARCH QUERY TYPED AND NO ARTICLE FOUND --}}
     @if ($search && count($recommends) == 0)
     <br/>
     <div class="alert alert-danger" role="alert">
         Tidak ada post yang ditemukan.
     </div>
+    {{-- IF SEARCH QUERY TYPED AND ARTICLE HAS BEEN FOUND --}}
     @elseif ($search && count($recommends) != 0)
     <div class="row row-cols-1 row-cols-md-4 g-4 pt-3">
         @foreach ($recommends as $json_key => $json_value)
@@ -144,7 +113,6 @@
                         <h5 class="card-title">{{ html_entity_decode($json_value['title']) }}</h5>
                     </a>
                     <p class="card-text">
-                        {{-- {{ ucfirst($json_value['category']) }} | {{ \Carbon\Carbon::parse(env($json_value['pubDate']))->locale('id')->translatedFormat('d F Y') }} --}}
                         {{ ucfirst(preg_replace('/(?<=[a-z])([A-Z])/', ' $1', $json_value['category'])) }} | {{ \Carbon\Carbon::parse(env($json_value['pubDate']))->locale('id')->translatedFormat('d F Y') }}
                     </p>
                 </div>
@@ -152,27 +120,27 @@
         </div>
         @endforeach
     </div>
+    {{-- NO SEARCH QUERY (ALL POST) --}}
     @else
-        <div class="row row-cols-1 row-cols-md-4 g-4 pt-3">
-            @foreach ($recommends as $json_key => $json_value)
-            <div class="col">
-                <div class="card h-100 border-0">
-                    <img src="{{ url($json_value['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/nopic.png') }}'" class="card-img-top card-img-bottom" alt="...">
-                    <div class="card-body">
-                        <a href="/{{ $selected_source }}/{{ $json_value['category'] }}/{{ $json_value['id'] }}" class="stretched-link text-body-emphasis show-preloader" style="text-decoration: none;">
-                            <h5 class="card-title">{{ html_entity_decode($json_value['title']) }}</h5>
-                        </a>
-                        <p class="card-text">
-                            {{-- {{ ucfirst($json_value['category']) }} | {{ \Carbon\Carbon::parse(env($json_value['pubDate']))->locale('id')->translatedFormat('d F Y') }} --}}
-                            {{ ucfirst(preg_replace('/(?<=[a-z])([A-Z])/', ' $1', $json_value['category'])) }} | {{ \Carbon\Carbon::parse(env($json_value['pubDate']))->locale('id')->translatedFormat('d F Y') }}
-                        </p>
-                    </div>
+    <div class="row row-cols-1 row-cols-md-4 g-4 pt-3">
+        @foreach ($recommends as $json_key => $json_value)
+        <div class="col">
+            <div class="card h-100 border-0">
+                <img src="{{ url($json_value['thumbnail']) }}" onerror="this.onerror=null; this.src='{{ asset('images/nopic.png') }}'" class="card-img-top card-img-bottom" alt="...">
+                <div class="card-body">
+                    <a href="/{{ $selected_source }}/{{ $json_value['category'] }}/{{ $json_value['id'] }}" class="stretched-link text-body-emphasis show-preloader" style="text-decoration: none;">
+                        <h5 class="card-title">{{ html_entity_decode($json_value['title']) }}</h5>
+                    </a>
+                    <p class="card-text">
+                        {{ ucfirst(preg_replace('/(?<=[a-z])([A-Z])/', ' $1', $json_value['category'])) }} | {{ \Carbon\Carbon::parse(env($json_value['pubDate']))->locale('id')->translatedFormat('d F Y') }}
+                    </p>
                 </div>
             </div>
-            @endforeach
         </div>
+        @endforeach
+    </div>
     @endif
-    {{-- </div> --}}
     <br/>
+    {{-- PAGINATION NAVIGATION --}}
     {{ $recommends->withQueryString()->links() }}
 </div>
