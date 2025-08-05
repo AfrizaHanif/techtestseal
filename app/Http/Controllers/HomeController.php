@@ -40,7 +40,12 @@ class HomeController extends Controller
             // return view('pages.error', compact([
             //     'error',
             // ]));
-            $this->errorCode($nav_response);
+            $title_error = $this->errorCode($nav_response)['title_error'];
+            $error = $this->errorCode($nav_response)['error'];
+            return view('pages.error', compact([
+                'title_error',
+                'error',
+            ]));
         }else{
             $title_error = '('.$nav_response->status().')';
             $error = '(Kode: '.$nav_response->status().') Terdapat kesalahan yang tidak diketahui';
@@ -76,6 +81,17 @@ class HomeController extends Controller
 
             // GET ALL POSTS FOR CATEGORY CHECKER
             $all_posts = $this->getAllPosts($sourceJson, $source);
+
+            // CHECK IF NULL RESULT
+            if(count($all_posts) == 0){
+                $title_error = 'Unexpected Error';
+                $error = 'Terdapat kesalahan yang ada saat mengambil artikel';
+                return view('pages.error', compact([
+                    'title_error',
+                    'error',
+                ]));
+            }
+
             // dd($all_posts);
 
             // dd(array_count_values(array_column($all_posts, 'category'))['terbaru']);
@@ -159,7 +175,12 @@ class HomeController extends Controller
             // return view('pages.error', compact([
             //     'error',
             // ]));
-            $this->errorCode($nav_response);
+            $title_error = $this->errorCode($nav_response)['title_error'];
+            $error = $this->errorCode($nav_response)['error'];
+            return view('pages.error', compact([
+                'title_error',
+                'error',
+            ]));
         }else{
             $title_error = '('.$nav_response->status().')';
             $error = '(Kode: '.$nav_response->status().') Terdapat kesalahan yang tidak diketahui';
@@ -213,6 +234,16 @@ class HomeController extends Controller
 
             // GET ALL POSTS FOR CATEGORY CHECKER
             $all_posts = $this->getAllPosts($sourceJson, $source);
+
+            // CHECK IF NULL RESULT
+            if(count($all_posts) == 0){
+                $title_error = 'Unexpected Error';
+                $error = 'Terdapat kesalahan yang ada saat mengambil artikel';
+                return view('pages.error', compact([
+                    'title_error',
+                    'error',
+                ]));
+            }
 
             // ADD ID FROM INDEX KEY TO ARRAY
             foreach($jsonData as $res_key => $res_value){
@@ -270,7 +301,12 @@ class HomeController extends Controller
             // return view('pages.error', compact([
             //     'error',
             // ]));
-            $this->errorCode($response);
+            $title_error = $this->errorCode($response)['title_error'];
+            $error = $this->errorCode($response)['error'];
+            return view('pages.error', compact([
+                'title_error',
+                'error',
+            ]));
         }else{
             $title_error = '('.$nav_response->status().')';
             $error = '(Kode: '.$nav_response->status().') Terdapat kesalahan yang tidak diketahui';
@@ -325,7 +361,16 @@ class HomeController extends Controller
 
             // GET ALL POSTS FOR CATEGORY CHECKER
             $all_posts = $this->getAllPosts($sourceJson, $source);
-            // dd($all_posts);
+
+            // CHECK IF NULL RESULT
+            if(count($all_posts) == 0){
+                $title_error = 'Unexpected Error';
+                $error = 'Terdapat kesalahan yang ada saat mengambil artikel';
+                return view('pages.error', compact([
+                    'title_error',
+                    'error',
+                ]));
+            }
 
             // SHUFFLE THE ARRAY FOR PICKING A RANDOM ITEMS
             $popularJson = $all_posts;
@@ -365,7 +410,12 @@ class HomeController extends Controller
             // return view('pages.error', compact([
             //     'error',
             // ]));
-            $this->errorCode($response);
+            $title_error = $this->errorCode($response)['title_error'];
+            $error = $this->errorCode($response)['error'];
+            return view('pages.error', compact([
+                'title_error',
+                'error',
+            ]));
         }else{
             $title_error = '('.$nav_response->status().')';
             $error = '(Kode: '.$nav_response->status().') Terdapat kesalahan yang tidak diketahui';
@@ -507,14 +557,9 @@ class HomeController extends Controller
                 // return view('pages.error', compact([
                 //     'error',
                 // ]));
-                $this->errorCode($response);
+                return null;
             }else{
-                $title_error = '('.$response->status().')';
-                $error = '(Kode: '.$response->status().') Terdapat kesalahan yang tidak diketahui';
-                return view('pages.error', compact([
-                    'title_error',
-                    'error',
-                ]));
+                return null;
             }
         }
         return $all_posts;
@@ -574,9 +619,10 @@ class HomeController extends Controller
             $title_error = '('.$response->status().')';
             $error = '(Kode: '.$response->status().') Terdapat kesalahan yang tidak diketahui';
         }
-        return view('pages.error', compact([
-            'title_error',
-            'error',
-        ]));
+        // return view('pages.error', compact([
+        //     'title_error',
+        //     'error',
+        // ]));
+        return ['title_error' => $title_error, 'error' => $error];
     }
 }
