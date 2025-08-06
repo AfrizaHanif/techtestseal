@@ -21,6 +21,8 @@
     @include('templates.includes.layouts.header')
     <!--SUB HEADER-->
     @include('templates.includes.layouts.subheader')
+    {{-- ANNOUNCEMENT / ALERT --}}
+    @include('templates.includes.components.alert')
     <!--BODY / CONTENTS-->
     <main>
         @yield('contents')
