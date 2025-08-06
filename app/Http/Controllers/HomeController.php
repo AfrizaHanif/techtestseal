@@ -23,11 +23,15 @@ class HomeController extends Controller
         if($response->successful()){
             // DECODING JSON WITH SETTING UP COLUMN AND SHUFFLE (RANDOM AND EXPLORE)
             $endpoint = array_column($this->getSource(json_decode($response, true)['endpoints']), 'name');
+
             $randomJson = $endpoint;
             shuffle($randomJson);
+            $exploreSourceJson = array_column($endpoint, 'name');
+            shuffle($exploreSourceJson);
 
             // SLICING THE ARRAY TO SPECIFIC LIMIT
             $random = array_slice($randomJson, 0, 1); // COMPACT
+            $exploreSource = array_slice($exploreSourceJson, 0, 5); // COMPACT
         }elseif($response->failed()){
             $title_error = $this->errorCode($response)['title_error']; // COMPACT
             $error = $this->errorCode($response)['error']; // COMPACT
@@ -46,6 +50,7 @@ class HomeController extends Controller
 
         // RETURN TO VIEW
         return view('pages.index', compact([
+            'exploreSource',
             'random',
         ]));
     }
@@ -83,10 +88,13 @@ class HomeController extends Controller
             shuffle($headlineJson);
             $popularJson = $all_posts;
             shuffle($popularJson);
+            $exploreCategoryJson = array_column($sourceJson[0]['paths'], 'name');
+            shuffle($exploreCategoryJson);
 
             // SLICING THE ARRAY TO SPECIFIC LIMIT
             $headlines = array_slice($headlineJson, 0, 5); // COMPACT
             $populars = array_slice($popularJson, 0, 3); // COMPACT
+            $exploreCategory = array_slice($exploreCategoryJson, 0, 5); // COMPACT
 
             // CHECK AMOUNT OF POST IN EVERY CATEGORIES
             $check_category = array_count_values(array_column($all_posts, 'category')); // COMPACT
@@ -98,6 +106,7 @@ class HomeController extends Controller
                 return view('pages.empty', compact([
                     'sourceJson',
                     'selected_source',
+                    'exploreCategory',
                     'check_category',
                     'error',
                 ]));
@@ -126,6 +135,7 @@ class HomeController extends Controller
             'recommends',
             'headlines',
             'populars',
+            'exploreCategory',
             'check_category',
         ]));
     }
@@ -180,10 +190,13 @@ class HomeController extends Controller
             shuffle($headlineJson);
             $popularJson = $jsonData;
             shuffle($popularJson);
+            $exploreCategoryJson = array_column($sourceJson[0]['paths'], 'name');
+            shuffle($exploreCategoryJson);
 
             // SLICING THE ARRAY
             $headlines = array_slice($headlineJson, 0, 5); // COMPACT
             $populars = array_slice($popularJson, 0, 3); // COMPACT
+            $exploreCategory = array_slice($exploreCategoryJson, 0, 5); // COMPACT
 
             // CHECK AMOUNT OF POST IN EVERY CATEGORIES
             $check_category = array_count_values(array_column($all_posts, 'category'));
@@ -195,8 +208,9 @@ class HomeController extends Controller
                 return view('pages.empty', compact([
                     'sourceJson',
                     'selected_source',
-                    'error',
+                    'exploreCategory',
                     'check_category',
+                    'error',
                 ]));
             }
         }elseif($response->failed()){
@@ -224,6 +238,7 @@ class HomeController extends Controller
             'recommends',
             'headlines',
             'populars',
+            'exploreCategory',
             'check_category',
         ]));
     }
@@ -261,10 +276,13 @@ class HomeController extends Controller
             shuffle($popularJson);
             $relatedJson = $all_posts;
             shuffle($relatedJson);
+            $exploreCategoryJson = array_column($sourceJson[0]['paths'], 'name');
+            shuffle($exploreCategoryJson);
 
             // SLICING THE ARRAY
             $populars = array_slice($popularJson, 0, 3); // COMPACT
             $related = array_slice($relatedJson, 0, 3); // COMPACT
+            $exploreCategory = array_slice($exploreCategoryJson, 0, 5); // COMPACT
 
             // CHECK AMOUNT OF POST IN EVERY CATEGORIES
             $check_category = array_count_values(array_column($all_posts, 'category')); // COMPACT
@@ -276,8 +294,9 @@ class HomeController extends Controller
                 return view('pages.empty', compact([
                     'sourceJson',
                     'selected_source',
-                    'error',
                     'check_category',
+                    'exploreCategory',
+                    'error',
                 ]));
             }
         }elseif($response->failed()){
@@ -305,6 +324,7 @@ class HomeController extends Controller
             'jsonData',
             'populars',
             'related',
+            'exploreCategory',
             'check_category',
         ]));
     }

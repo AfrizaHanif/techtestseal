@@ -15,23 +15,7 @@
                 {{-- CATEGORY NAVIGATION --}}
                 <ul class="nav nav-pills">
                     @if (Request::is('/'))
-                    {{-- <li class="nav-item">
-                        <a href="#" class="nav-link disabled" aria-current="page">
-                            Beranda
-                        </a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle disabled" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Kategori
-                        </a>
-                        <ul class="dropdown-menu disabled">
-                            <li>
-                                <a class="dropdown-item disabled" href="#">
-                                    Disabled
-                                </a>
-                            </li>
-                        </ul>
-                    </li> --}}
+                    
                     @else
                         @if ($sourceJson = $sourceJson ?? [] && $selected_source = $selected_source ?? [])
                         {{-- SOURCE'S MAIN PAGE LINK --}}

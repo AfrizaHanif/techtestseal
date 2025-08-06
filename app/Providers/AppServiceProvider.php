@@ -34,24 +34,10 @@ class AppServiceProvider extends ServiceProvider
             // NAVIGATION (HEADER)
             $navJson = array_column($endpoint, 'name'); // COMPACT
 
-            // EXPLORE (FOOTER) (SOURCE)
-            $exploreSourceJson = array_column($endpoint, 'name');
-            shuffle($exploreSourceJson);
-            $exploreSource = array_slice($exploreSourceJson, 0, 5); // COMPACT
-
-            // EXPLORE (FOOTER) (CATEGORY)
-            $exploreCategoryJson = array_column($endpoint[0]['paths'], 'name');
-            shuffle($exploreCategoryJson);
-            $exploreCategory = array_slice($exploreCategoryJson, 0, 5); // COMPACT
-
             // SHARE VARIABLE TO VIEW
             View::share('navJson', $navJson);
-            View::share('exploreSource', $exploreSource);
-            View::share('exploreCategory', $exploreCategory);
         }else{
             View::share('navJson', null);
-            View::share('exploreSource', null);
-            View::share('exploreCategory', null);
         }
 
         Paginator::useBootstrapFive();
