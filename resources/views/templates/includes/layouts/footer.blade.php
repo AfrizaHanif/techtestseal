@@ -46,7 +46,7 @@
                 @if ($exploreCategory = $exploreCategory ?? [])
                 <ul class="nav flex-column">
                     @foreach ($exploreCategory as $exp_key => $exp_Value)
-                    <li class="nav-item mb-2"><a href="/{{ $selected_source }}/{{ $exp_Value }}" class="nav-link p-0 text-body-secondary">{{ ucfirst($exp_Value) }}</a></li>
+                    <li class="nav-item mb-2"><a href="/{{ $selected_source }}/{{ $exp_Value }}" class="nav-link p-0 text-body-secondary">{{ ucfirst(preg_replace('/(?<=[a-z])([A-Z])/', ' $1', $exp_Value)) }}</a></li>
                     @endforeach
                 </ul>
                 @endif
