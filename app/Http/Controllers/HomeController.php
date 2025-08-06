@@ -26,7 +26,7 @@ class HomeController extends Controller
 
             $randomJson = $endpoint;
             shuffle($randomJson);
-            $exploreSourceJson = array_column($endpoint, 'name');
+            $exploreSourceJson = $endpoint;
             shuffle($exploreSourceJson);
 
             // SLICING THE ARRAY TO SPECIFIC LIMIT
