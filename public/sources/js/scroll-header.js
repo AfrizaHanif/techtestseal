@@ -31,18 +31,18 @@
 //     });
 // });
 
-$('#scroll_header').hide();
+$('.scroll_header').hide();
 
 $(function() {
     function fadeFunction() {
         $(window).scroll(function() {
         //console.log('scrolling ', $(window).scrollTop(), $(document).height());
         if ($(window).scrollTop() >= 120 && $(window).scrollTop() <= ($(document).height() - 120)) {
-            // $('#scroll_header').fadeIn(1000);
-            $('#scroll_header').show();
+            // $('.scroll_header').fadeIn(1000);
+            $('.scroll_header').show();
         } else {
-            // $('#scroll_header').fadeOut(1000);
-            $('#scroll_header').hide();
+            // $('.scroll_header').fadeOut(1000);
+            $('.scroll_header').hide();
         }
         });
     }

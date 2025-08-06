@@ -19,6 +19,8 @@
     @include('templates.includes.svgs.bootstrap-icon')
     <!--HEADER-->
     @include('templates.includes.layouts.header')
+    <!--SUB HEADER-->
+    @include('templates.includes.layouts.subheader')
     <!--BODY / CONTENTS-->
     <main>
         @yield('contents')

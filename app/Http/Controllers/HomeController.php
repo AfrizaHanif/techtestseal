@@ -66,16 +66,6 @@ class HomeController extends Controller
             // GET ALL POSTS FOR CATEGORY CHECKER
             $all_posts = $this->getAllPosts($sourceJson, $source);
 
-            // CHECK IF NULL RESULT
-            if(count($all_posts) == 0){
-                $title_error = 'Unexpected Error'; // COMPACT
-                $error = 'Terdapat kesalahan yang ada saat mengambil artikel'; // COMPACT
-                return view('pages.error', compact([
-                    'title_error',
-                    'error',
-                ]));
-            }
-
             // IF SEARCH AVAILABLE
             if($search){
                 // LAUNCH FUNCTION TO SEARCH TITLE
@@ -167,16 +157,6 @@ class HomeController extends Controller
 
             // GET ALL POSTS FOR CATEGORY CHECKER
             $all_posts = $this->getAllPosts($sourceJson, $source);
-
-            // CHECK IF NULL RESULT
-            if(count($all_posts) == 0){
-                $title_error = 'Unexpected Error'; // COMPACT
-                $error = 'Terdapat kesalahan yang ada saat mengambil artikel'; // COMPACT
-                return view('pages.error', compact([
-                    'title_error',
-                    'error',
-                ]));
-            }
 
             // ADD ID FROM INDEX KEY TO ARRAY
             foreach($jsonData as $res_key => $res_value){
@@ -275,16 +255,6 @@ class HomeController extends Controller
 
             // GET ALL POSTS FOR CATEGORY CHECKER
             $all_posts = $this->getAllPosts($sourceJson, $source);
-
-            // CHECK IF NULL RESULT
-            if(count($all_posts) == 0){
-                $title_error = 'Unexpected Error'; // COMPACT
-                $error = 'Terdapat kesalahan yang ada saat mengambil artikel'; // COMPACT
-                return view('pages.error', compact([
-                    'title_error',
-                    'error',
-                ]));
-            }
 
             // SHUFFLE THE ARRAY FOR PICKING A RANDOM ITEMS
             $popularJson = $all_posts;
@@ -447,10 +417,9 @@ class HomeController extends Controller
                     // MERGE ARRAY DURING LOOPING
                     $all_posts = array_merge($all_posts, $sourceJson['data']['posts']);
                 }
-            }else{
-                return null;
             }
         }
+        // dd($all_posts);
         return $all_posts;
     }
 
